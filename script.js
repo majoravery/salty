@@ -291,7 +291,7 @@ function loadQuestion(index) {
   }
 
   const { question, image, answers, callback } = QUESTIONS[index];
-  document.querySelector("#question").innerHTML = question;
+  document.querySelector("#text").innerHTML = question;
   //   document.querySelector("#image img").src = image;
   answers.forEach(({ text, markers }, index) => {
     const button = document.createElement("button");
@@ -343,7 +343,7 @@ function endQuiz() {
 
 function showResults() {
   document.querySelector("body").classList.remove("quiz");
-  document.querySelector("#question").innerHTML = `yay you are ${salt}`;
+  document.querySelector("#text").innerHTML = `yay you are ${salt}`;
   console.log(MARKERS.e1, MARKERS.e2, MARKERS.e3);
   console.log(MARKERS.a, MARKERS.b);
   console.log(MARKERS.y, MARKERS.z);
