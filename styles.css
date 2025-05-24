@@ -29,8 +29,6 @@ body {
     display: grid;
     gap: 1rem;
     grid-template-columns: 1fr;
-    height: 100vh;
-    /* max-height: var(--body-max-height); */
     margin: auto;
     max-width: 720px;
     padding: 1rem 24px 1.5rem;
@@ -48,7 +46,7 @@ body.landing {
 }
 
 body.quiz {
-    grid-template-rows: 2fr 10fr 5fr 8fr;
+    grid-template-rows: min-content min-content min-content min-content;
     grid-template-areas:
         "header"
         "image"
@@ -57,20 +55,13 @@ body.quiz {
 }
 
 body.results {
-    grid-template-rows: 1;
+    grid-template-rows: min-content min-content max-content;
+    grid-template-areas:
+        "header"
+        "image"
+        "text"
+        "buttons";
 }
-
-/* body.modal-open:after {
-    background-color: rgba(0, 0, 0, 0.7);
-    bottom: 0;
-    content: '';
-    height: 100%;
-    left: 0;
-    position: absolute;
-    right: 0;
-    top: 0;
-    width: 100%;
-} */
 
 header {
     grid-area: header;
@@ -99,6 +90,7 @@ p#text {
     align-self: center;
     font-size: var(--text-font-size);
     grid-area: text;
+    margin: 1.5rem 0 1rem;
 }
 
 div#buttons {
@@ -113,32 +105,43 @@ body.landing div#buttons {
 }
 
 button {
-    background-color: rgb(73, 42, 42);
-    /* background-color: rgb(225 225 225); */
+    background-color: rgb(255, 255, 255);
     border-radius: 0.75rem;
-    border: 0;
-    color: rgb(251, 252, 244);
-    /* color: rgb(73, 42, 42); */
+    border: 2px solid rgb(73, 42, 42);
+    color: rgb(73, 42, 42);
+    cursor: pointer;
     font-family: "Funnel Sans", sans-serif;
     font-optical-sizing: auto;
     font-size: var(--button-font-size);
     font-style: normal;
     font-weight: 400;
     outline: none;
-    padding: 1rem 1.2rem;
+    padding: 0.8rem 1.2rem;
 }
 
 
 button:hover {
     background-color: rgb(105, 68, 68);
-    cursor: pointer;
 }
 
-button:active {
+button:active,
+button.selected {
     background-color: rgb(114, 71, 71);
-    cursor: pointer;
 }
 
 button+button {
     margin-top: 1rem;
+}
+
+p#disclaimer {
+    display: none;
+}
+
+body.results p#disclaimer {
+    color: rgb(73, 42, 42);
+    font-family: "Funnel Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-size: 0.8rem;
+    font-style: normal;
+    display: block;
 }

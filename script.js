@@ -56,6 +56,9 @@ const MAPPING_SALTS = {
   },
 };
 
+// yea if you make changes to the questions array pls update this or it's gon break obvs
+const INDEX_TIEBREAKER = 10;
+
 const QUESTIONS = [
   {
     question:
@@ -75,7 +78,7 @@ const QUESTIONS = [
   },
   {
     question:
-      "Out of nowhere, a giant spoon crashes in and scoops you all up. It carries you high up into the air, out of the jar. You…",
+      "Out of nowhere, a giant spoon crashes in and scoops you up. It carries you high up into the air, out of the jar. You…",
     image: "2.png",
     answers: [
       {
@@ -132,9 +135,19 @@ const QUESTIONS = [
       { text: "Use her as bait for curious ants", markers: ["a", "y"] },
       {
         text: "Let her do her thing and watch how it plays out",
-        markers: ["b"],
+        markers: ["b", "y"],
       },
     ],
+    postprocessor: (selected) => {
+      delete QUESTIONS[INDEX_TIEBREAKER].answers[0].options[selected];
+      const { options, markers } = QUESTIONS[INDEX_TIEBREAKER].answers[0];
+      const texts = options.filter((option) => !!option.length);
+
+      QUESTIONS[INDEX_TIEBREAKER].answers[0] = {
+        text: texts[(texts.length * Math.random()) | 0],
+        markers,
+      };
+    },
   },
   {
     question:
@@ -151,38 +164,63 @@ const QUESTIONS = [
         markers: ["b", "y"],
       },
       {
-        text: "Ignore and continue walking because conga line looks hella sketch",
+        text: "Ignore and continue walking because that conga line looks hella sketch",
         markers: ["a", "z"],
       },
     ],
+    postprocessor: (selected) => {
+      // user said yes to conga
+      if (selected === 0) {
+        delete QUESTIONS[INDEX_TIEBREAKER].answers[1].options[0]; // yes
+      } else {
+        delete QUESTIONS[INDEX_TIEBREAKER].answers[1].options[1]; // no
+      }
+      const { options, markers } = QUESTIONS[INDEX_TIEBREAKER].answers[1];
+      const text = options.filter((option) => !!option.length)[0];
+
+      QUESTIONS[INDEX_TIEBREAKER].answers[1] = {
+        text,
+        markers,
+      };
+    },
   },
   {
     question:
-      "10,000 steps later, you realise this world is more vast than you expected. The group is getting tired, morale is low. Everyone is starting to clump and Sugar is slowly fermenting. What do you do?",
+      "You encounter a lone Peppercorn who raves on about the other world that you should visit. “Beyond this steel plane, it is where grains like us go and never melt!” You…",
     image: "7.png",
-    answers: [
-      {
-        text: "Rally everyone’s spirits like an over-enthusiastic spin instructor",
-        markers: ["e1"],
-      },
-      { text: "Crack a joke, distract them!", markers: ["e2"] },
-      { text: "Let everyone rest, it’s been a hard day", markers: ["e3"] },
-      {
-        text: "Devise some sort of trolley to push your tired comrades",
-        markers: ["e1"],
-      },
-    ],
-  },
-  {
-    question:
-      "You encounter a lone Peppercorn who raves on about the other world that you should visit. “Beyond this steel plane, it is where grains like us go and never melt.” You…",
-    image: "8.png",
     answers: [
       { text: "Roll your eyes–classic Peppercorn", markers: ["y"] },
       {
         text: "Consider it deeply and feel something shift inside you",
         markers: ["z"],
       },
+    ],
+    postprocessor: (selected) => {
+      delete QUESTIONS[INDEX_TIEBREAKER].answers[2].options[selected];
+      const { options, markers } = QUESTIONS[INDEX_TIEBREAKER].answers[2];
+      const text = options.filter((option) => !!option.length)[0];
+
+      QUESTIONS[INDEX_TIEBREAKER].answers[2] = {
+        text,
+        markers,
+      };
+    },
+  },
+  {
+    question:
+      "10,000 steps later, you realise this world is larger than you expected. The group is getting tired, morale is low. Everyone is starting to clump up and Sugar is slowly fermenting. What do you do?",
+    image: "8.png",
+    answers: [
+      {
+        text: "Devise some sort of trolley to push your tired comrades",
+        markers: ["e1"],
+      },
+      {
+        text: "Rally everyone’s spirits like an over-enthusiastic spin instructor",
+        markers: ["e1"],
+      },
+      { text: "Crack a joke, distract them!", markers: ["e2"] },
+      { text: "Let everyone rest, it’s been a hard day", markers: ["e3"] },
     ],
   },
   {
@@ -216,7 +254,13 @@ const QUESTIONS = [
         text: "Roasted eggplant, crispy chickpeas and hummus",
       },
     ],
-    callback: setCuisine,
+    postprocessor: (selected) => {
+      if (isNaN(selected)) {
+        throw new Error("Can't set cuisine with a non-numerical index");
+      }
+      cuisine = selected;
+      console.log(cuisine);
+    },
   },
   {
     question:
@@ -224,34 +268,50 @@ const QUESTIONS = [
     image: "11.png",
     answers: [
       {
-        text: "Befriending Sugar/Flirting with Sugar/Betraying Sugar",
+        options: [
+          "Befriending Sugar",
+          "Flirting with Sugar",
+          "Betraying Sugar",
+        ],
         markers: ["e2"],
       },
       {
-        text: "Joining Peppercorn to find the other world/Taking Peppercorn’s words with a grain of salt",
-        markers: ["e1"],
-      },
-      {
-        text: "Saying yes to the conga line/Saying no to the conga line",
+        options: [
+          "Saying yes to the conga line",
+          "Saying no to the conga line",
+        ],
         markers: ["e3"],
       },
+      {
+        options: [
+          "Taking Peppercorn’s words with a grain of salt",
+          "Joining Peppercorn in finding the other world",
+        ],
+        markers: ["e1"],
+      },
     ],
+    preprocessor: () => {
+      // If no tiebreaker is needed, skip question
+      if (
+        MARKERS.e1 !== MARKERS.e2 &&
+        MARKERS.e1 !== MARKERS.e3 &&
+        MARKERS.e2 !== MARKERS.e3
+      ) {
+        goToNextQuestion();
+        return 1;
+      }
+    },
   },
   {
     question:
-      "You touch down, and slowly dissolve. Warmth engulfs you. As you disintegrate, you think…",
+      "You touch down. Warmth engulfs you. Your crystals break down and infuse the dish with flavour. As you disintegrate, you think…",
     image: "12.png",
     answers: [
-      { text: "I have fulfilled my purpose in this world", markers: ["e1"] },
+      { text: "I have fulfilled my purpose in this world" },
       {
         text: "Y’all bishes better be grateful I flavoured you good",
-        markers: ["e2"],
       },
-      { text: "Next time, I’m being a chilli flake", markers: ["e3"] },
-      {
-        text: "I love you all, my Saltmates. Till next time 💗",
-        markers: ["e2"],
-      },
+      { text: "Next time, I’m being a chilli flake" },
     ],
   },
 ];
@@ -271,10 +331,11 @@ function goToNextQuestion() {
   console.log("goToNextQuestion");
   activeQuestion++;
   loadQuestion(activeQuestion);
+  return;
 }
 
 function loadQuestion(index) {
-  console.log("loadQuestion");
+  console.log("loadQuestion", activeQuestion);
   if (isNaN(index) || index < 0) {
     throw new Error(`loadQuestions cannot load question index ${index}`);
   }
@@ -284,26 +345,36 @@ function loadQuestion(index) {
     return;
   }
 
-  const buttons = document.querySelector("#buttons");
+  const { preprocessor, question, image, answers, postprocessor } =
+    QUESTIONS[index];
 
-  while (buttons.firstChild) {
-    buttons.removeChild(buttons.firstChild);
+  if (preprocessor) {
+    const quit = preprocessor();
+    if (quit) {
+      return;
+    }
   }
 
-  const { question, image, answers, callback } = QUESTIONS[index];
+  clearButtons();
+
   document.querySelector("#text").innerHTML = question;
-  //   document.querySelector("#image img").src = image;
-  answers.forEach(({ text, markers }, index) => {
+  document.querySelector("#image").src = image
+    ? `images/${image}`
+    : `images/salt-11.png`;
+  answers.forEach(({ text, markers }, indexAns) => {
     const button = document.createElement("button");
     button.innerHTML = text;
+    const buttons = document.querySelector("#buttons");
     buttons.appendChild(button);
     button.onclick = function () {
-      if (callback) {
-        callback(index);
-      }
+      button.classList.add("selected");
 
       if (markers) {
         makeSelection(markers);
+      }
+
+      if (postprocessor) {
+        postprocessor(indexAns);
       }
 
       // selection is made, go to next question
@@ -312,22 +383,19 @@ function loadQuestion(index) {
   });
 }
 
+function clearButtons() {
+  const buttons = document.querySelector("#buttons");
+  while (buttons.firstChild) {
+    buttons.removeChild(buttons.firstChild);
+  }
+}
+
 function makeSelection(markers) {
   console.log("makeSelection");
   markers.forEach((marker) => {
     MARKERS[marker]++;
   });
   console.log(MARKERS);
-}
-
-function setCuisine(option) {
-  console.log("setCuisine");
-  if (isNaN(option)) {
-    throw new Error("setCuisine needs a numerical cuisine id");
-  }
-  cuisine = option;
-  console.log(cuisine);
-  return;
 }
 
 function endQuiz() {
@@ -342,24 +410,17 @@ function endQuiz() {
 }
 
 function showResults() {
+  clearButtons();
   document.querySelector("body").classList.remove("quiz");
   document.querySelector("#text").innerHTML = `yay you are ${salt}`;
+  const button = document.createElement("button");
+  button.innerHTML = "Share results";
+  buttons.appendChild(button);
+
   console.log(MARKERS.e1, MARKERS.e2, MARKERS.e3);
   console.log(MARKERS.a, MARKERS.b);
   console.log(MARKERS.y, MARKERS.z);
   document.querySelector("body").classList.add("results");
-}
-
-function resetQuiz() {
-  console.log("resetQuiz");
-  cuisine = undefined;
-  salt = undefined;
-  Object.keys(MARKERS).forEach((key) => {
-    MARKERS[key] = 0;
-  });
-  document.querySelector("body").classList.remove("results");
-  // display landing page
-  document.querySelector("body").classList.add("landing");
 }
 
 function init() {
