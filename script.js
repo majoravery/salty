@@ -150,7 +150,7 @@ const QUESTIONS = [
       const texts = options.filter((option) => !!option.length);
 
       QUESTIONS[INDEX_TIEBREAKER].answers[0] = {
-        text: texts[(texts.length * Math.random()) | 0],
+        text: texts[random(texts.length)],
         markers,
       };
     },
@@ -395,7 +395,6 @@ function loadQuestion(index) {
 
 function clearScreen() {
   document.querySelector("#text").innerHTML = "";
-  document.querySelector("#image img").src = "";
   const buttons = document.querySelector("#buttons");
   while (buttons.firstChild) {
     buttons.removeChild(buttons.firstChild);
@@ -418,12 +417,22 @@ function endQuiz() {
   const axis3 = MARKERS.y > MARKERS.z ? "y" : "z";
   salt = MAPPING_SALTS[axis1][axis2][axis3];
 
-  showResults();
+  showDelay();
+  setTimeout(showResults, random(1200, 2500));
+}
+
+function showDelay() {
+  clearScreen();
+  document.querySelector("body").classList.remove("quiz");
+  document.querySelector("#image img").src = "";
+  document.querySelector("#text").innerHTML =
+    "Determining your mineral identity...";
+  document.querySelector("body").classList.add("delay");
 }
 
 function showResults() {
   clearScreen();
-  document.querySelector("body").classList.remove("quiz");
+  document.querySelector("body").classList.remove("delay");
   document.querySelector(
     "#image img"
   ).src = `images/archetypes/${salt.image}-${cuisine}.png`;
@@ -467,9 +476,16 @@ function showResults() {
 }
 
 function init() {
-  const opener = OPENERS[Math.floor(Math.random() * OPENERS.length)];
+  const opener = OPENERS[random(OPENERS.length)];
   document.querySelector("#text").innerHTML = opener;
   document.querySelector("#buttons button").onclick = loadQuiz;
 }
 
 init();
+
+// utils
+
+// min inclusive, max exclusive
+function random(max, min = 0) {
+  return Math.floor(Math.random() * (max - min) + min);
+}

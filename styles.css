@@ -7,6 +7,7 @@
     --h1-font-size: 1.5rem;
     --h1-letter-spacing: -0.03rem;
     --text-font-size: 1.2rem;
+    --text-delay-font-size: 1.6rem;
     --button-font-size: 1rem;
 }
 
@@ -17,8 +18,8 @@
         --h1-landing-line-height: 6.6rem;
         --h1-font-size: 2rem;
         --h1-letter-spacing: -0.05rem;
-        ;
         --text-font-size: 1.5rem;
+        --text-delay-font-size: 2rem;
         --button-font-size: 1.2rem;
     }
 }
@@ -60,6 +61,14 @@ body.quiz {
         "image"
         "text"
         "buttons";
+}
+
+body.delay {
+    grid-template-rows: min-content 1fr;
+    grid-template-areas:
+        "header"
+        "text";
+    height: 100vh;
 }
 
 body.results {
@@ -124,6 +133,10 @@ body.results div#image {
     padding-top: 125%;
 }
 
+body.delay div#image {
+    display: none;
+}
+
 div#image img {
     left: 0;
     position: absolute;
@@ -142,6 +155,12 @@ body.landing p#text {
     display: none;
 }
 
+body.delay p#text {
+    font-size: var(--text-delay-font-size);
+    margin: auto;
+    max-width: 60vw;
+}
+
 body.results p#text {
     margin: 0;
 }
@@ -155,6 +174,10 @@ div#buttons {
 
 body.landing div#buttons {
     align-self: self-start;
+}
+
+body.delay div#buttons {
+    display: none;
 }
 
 button {
