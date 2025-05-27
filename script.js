@@ -1,16 +1,22 @@
+const LINK = "";
+
+// image filename format `${salt name}-${cuisine index}.png`
 const SALTS = {
-  SODIUM_CHLORIDE: "Sodium chloride",
-  KOSHER_SALT: "Kosher salt",
-  KALA_NAMAK: "Kala namak",
-  SMOKED_SALT: "Smoked salt",
-  MOSHIO_SALT: "Moshio salt",
-  YUZU_SALT: "Yuzu salt",
-  HIMALAYAN_PINK_SALT: "Himalayan pink salt",
-  FLEUR_DE_SEL: "Fleur de sel",
-  TABLE_SALT: "Table salt",
-  SEL_GRIS: "Sel gris",
-  EPSOM_SALT: "Epsom salt",
-  FLAKY_SALT: "Flaky salt",
+  SODIUM_CHLORIDE: { name: "Sodium chloride", image: "sodium-chloride" },
+  KOSHER_SALT: { name: "Kosher salt", image: "kosher-salt" },
+  KALA_NAMAK: { name: "Kala namak", image: "kala-namak" },
+  SMOKED_SALT: { name: "Smoked salt", image: "smoked-salt" },
+  MOSHIO_SALT: { name: "Moshio salt", image: "moshio-salt" },
+  YUZU_SALT: { name: "Yuzu salt", image: "yuzu-salt" },
+  HIMALAYAN_PINK_SALT: {
+    name: "Himalayan pink salt",
+    image: "himalayan-pink-salt",
+  },
+  FLEUR_DE_SEL: { name: "Fleur de sel", image: "fleur-de-sel" },
+  TABLE_SALT: { name: "Table salt", image: "table-salt" },
+  SEL_GRIS: { name: "Sel gris", image: "sel-gris" },
+  EPSOM_SALT: { name: "Epsom salt", image: "epsom-salt" },
+  FLAKY_SALT: { name: "Flaky salt", image: "flaky-salt" },
 };
 
 const MARKERS = {
@@ -30,8 +36,8 @@ const MAPPING_SALTS = {
       z: SALTS.KOSHER_SALT,
     },
     b: {
-      y: SALTS.KALA_NAMAK,
-      z: SALTS.SMOKED_SALT,
+      y: SALTS.SMOKED_SALT,
+      z: SALTS.KALA_NAMAK,
     },
   },
   e2: {
@@ -254,11 +260,8 @@ const QUESTIONS = [
         text: "Roasted eggplant, crispy chickpeas and hummus",
       },
     ],
-    postprocessor: (selected) => {
-      if (isNaN(selected)) {
-        throw new Error("Can't set cuisine with a non-numerical index");
-      }
-      cuisine = selected;
+    postprocessor: (selectedIndex) => {
+      cuisine = selectedIndex;
       console.log(cuisine);
     },
   },
@@ -312,8 +315,17 @@ const QUESTIONS = [
         text: "Y’all bishes better be grateful I flavoured you good",
       },
       { text: "Next time, I’m being a chilli flake" },
+      { text: "Till we meet again, my Salt mates 💗" },
     ],
   },
+];
+
+const OPENERS = [
+  "Your mineral identity awaits",
+  "Because horoscopes weren’t salty enough",
+  "Discover your crystalline personality",
+  "Saltier than your zodiac sign",
+  "Time to season your self-awareness",
 ];
 
 let cuisine;
@@ -336,9 +348,9 @@ function goToNextQuestion() {
 
 function loadQuestion(index) {
   console.log("loadQuestion", activeQuestion);
-  if (isNaN(index) || index < 0) {
-    throw new Error(`loadQuestions cannot load question index ${index}`);
-  }
+  // if (isNaN(index) || index < 0) {
+  //   throw new Error(`loadQuestions cannot load question index ${index}`);
+  // }
 
   if (index === QUESTIONS.length) {
     endQuiz();
@@ -355,12 +367,10 @@ function loadQuestion(index) {
     }
   }
 
-  clearButtons();
+  clearScreen();
 
   document.querySelector("#text").innerHTML = question;
-  document.querySelector("#image").src = image
-    ? `images/${image}`
-    : `images/salt-11.png`;
+  document.querySelector("#image img").src = `images/questions/${image}`;
   answers.forEach(({ text, markers }, indexAns) => {
     const button = document.createElement("button");
     button.innerHTML = text;
@@ -383,7 +393,9 @@ function loadQuestion(index) {
   });
 }
 
-function clearButtons() {
+function clearScreen() {
+  document.querySelector("#text").innerHTML = "";
+  document.querySelector("#image img").src = "";
   const buttons = document.querySelector("#buttons");
   while (buttons.firstChild) {
     buttons.removeChild(buttons.firstChild);
@@ -410,12 +422,43 @@ function endQuiz() {
 }
 
 function showResults() {
-  clearButtons();
+  clearScreen();
   document.querySelector("body").classList.remove("quiz");
-  document.querySelector("#text").innerHTML = `yay you are ${salt}`;
-  const button = document.createElement("button");
-  button.innerHTML = "Share results";
-  buttons.appendChild(button);
+  document.querySelector(
+    "#image img"
+  ).src = `images/archetypes/${salt.image}-${cuisine}.png`;
+  document.querySelector("#image img").alt = `You are ${salt.name}!`;
+
+  // download card (needs fixing but for now imma leave it)
+  const hidden = document.createElement("a");
+  hidden.href = `images/archetypes/${encodeURIComponent(salt.image)}`;
+  hidden.download = salt.name;
+  const download = document.createElement("button");
+  download.innerHTML = "Download salt card";
+  download.onclick = function () {
+    hidden.click();
+  };
+  buttons.appendChild(download);
+
+  // share results
+  const shareCta = "Share with friends!";
+  const share = document.createElement("button");
+  share.innerHTML = shareCta;
+  share.onclick = async function () {
+    const message = `My salt identity is ${salt.name} and I'm not salty about it. Find out what salt you are at ${LINK}`;
+    try {
+      await navigator.clipboard.writeText(message);
+      share.innerHTML = "Copied to clipboard!";
+      setTimeout(() => {
+        share.innerHTML = shareCta;
+      }, 2000);
+    } catch (error) {
+      share.innerHTML = "Couldn't copy to clipboard";
+      console.error("Unable to copy to clipboard");
+      // throw new Error("Unable to copy to clipboard");
+    }
+  };
+  buttons.appendChild(share);
 
   console.log(MARKERS.e1, MARKERS.e2, MARKERS.e3);
   console.log(MARKERS.a, MARKERS.b);
@@ -424,6 +467,8 @@ function showResults() {
 }
 
 function init() {
+  const opener = OPENERS[Math.floor(Math.random() * OPENERS.length)];
+  document.querySelector("#text").innerHTML = opener;
   document.querySelector("#buttons button").onclick = loadQuiz;
 }
 

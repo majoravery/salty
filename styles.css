@@ -1,14 +1,23 @@
 @import url('https://fonts.googleapis.com/css2?family=Funnel+Sans:ital,wght@0,300..800;1,300..800&display=swap');
 
 :root {
+    --h1-landing-font-size: 4.5rem;
+    --h1-landing-letter-spacing: -0.2rem;
+    --h1-landing-line-height: 3.8rem;
     --h1-font-size: 1.5rem;
+    --h1-letter-spacing: -0.03rem;
     --text-font-size: 1.2rem;
     --button-font-size: 1rem;
 }
 
 @media (min-width: 640px) {
     :root {
+        --h1-landing-font-size: 8rem;
+        --h1-landing-letter-spacing: -0.4rem;
+        --h1-landing-line-height: 6.6rem;
         --h1-font-size: 2rem;
+        --h1-letter-spacing: -0.05rem;
+        ;
         --text-font-size: 1.5rem;
         --button-font-size: 1.2rem;
     }
@@ -21,7 +30,7 @@
 }
 
 body {
-    background-color: rgb(251, 252, 244);
+    background-color: #ffffff;
     color: rgb(73, 42, 42);
     font-family: "Funnel Sans", sans-serif;
     font-optical-sizing: auto;
@@ -37,12 +46,11 @@ body {
 }
 
 body.landing {
-    grid-template-rows: 1fr 2fr 0fr 1fr;
+    grid-template-rows: 3fr 2fr;
     grid-template-areas:
         "header"
-        "image"
-        "text"
         "buttons";
+    height: 100vh;
 }
 
 body.quiz {
@@ -68,12 +76,29 @@ header {
 }
 
 body.landing header {
-    align-self: center;
+    align-self: self-end;
+    margin-bottom: 2.5rem;
+    pointer-events: none;
 }
 
 h1 {
     font-size: var(--h1-font-size);
     font-weight: 400;
+    letter-spacing: var(--h1-letter-spacing);
+}
+
+body.landing h1 {
+    font-size: var(--h1-landing-font-size);
+    letter-spacing: var(--h1-landing-letter-spacing);
+    line-height: var(--h1-landing-line-height);
+    margin: auto;
+    max-width: 350px;
+}
+
+@media (min-width: 640px) {
+    body.landing h1 {
+        max-width: 520px;
+    }
 }
 
 h1 a {
@@ -81,8 +106,28 @@ h1 a {
     text-decoration: inherit;
 }
 
-img#image {
+div#image {
     grid-area: image;
+    position: relative;
+    width: 100%;
+}
+
+body.landing div#image {
+    display: none;
+}
+
+body.quiz div#image {
+    padding-top: 100%;
+}
+
+body.results div#image {
+    padding-top: 125%;
+}
+
+div#image img {
+    left: 0;
+    position: absolute;
+    top: 0;
     width: 100%;
 }
 
@@ -93,6 +138,14 @@ p#text {
     margin: 1.5rem 0 1rem;
 }
 
+body.landing p#text {
+    display: none;
+}
+
+body.results p#text {
+    margin: 0;
+}
+
 div#buttons {
     display: flex;
     flex-direction: column;
@@ -101,13 +154,13 @@ div#buttons {
 }
 
 body.landing div#buttons {
-    align-self: center;
+    align-self: self-start;
 }
 
 button {
-    background-color: rgb(255, 255, 255);
+    background-color: #ffffff;
     border-radius: 0.75rem;
-    border: 2px solid rgb(73, 42, 42);
+    border: 4px solid rgb(73, 42, 42);
     color: rgb(73, 42, 42);
     cursor: pointer;
     font-family: "Funnel Sans", sans-serif;
@@ -121,12 +174,12 @@ button {
 
 
 button:hover {
-    background-color: rgb(105, 68, 68);
+    background-color: #eeeeee;
 }
 
 button:active,
 button.selected {
-    background-color: rgb(114, 71, 71);
+    background-color: #dddddd;
 }
 
 button+button {
@@ -134,14 +187,20 @@ button+button {
 }
 
 p#disclaimer {
-    display: none;
-}
-
-body.results p#disclaimer {
     color: rgb(73, 42, 42);
     font-family: "Funnel Sans", sans-serif;
     font-optical-sizing: auto;
     font-size: 0.8rem;
     font-style: normal;
+    display: none;
+}
+
+body.landing p#disclaimer {
+    align-self: self-end;
+    display: block;
+    grid-area: buttons;
+}
+
+body.results p#disclaimer {
     display: block;
 }
