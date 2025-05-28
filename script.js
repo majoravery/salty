@@ -449,9 +449,9 @@ function showResults() {
   imageEl.src = cardImgUrl;
   imageEl.alt = `You are ${salt.name}!`;
 
-  // add download card button (needs fixing but for now imma leave it)
+  // add download card button
   const hidden = document.createElement("a");
-  hidden.href = `images/cards/${encodeURIComponent(salt.image)}`;
+  hidden.href = cardImgUrl;
   hidden.download = salt.name;
   const download = document.createElement("button");
   download.innerHTML = "Download salt card";
@@ -490,18 +490,29 @@ function showResults() {
   );
 }
 
-function share() {
+async function share() {
   if (!navigator.share) {
     throw "navigator.share not supported";
   }
 
   const data = {
     title: "What Salt Are You?",
-    text: `My salt identity is ${salt.name} and I'm not salty about it. Find out what salt you are:`,
+    text: `My salt identity is ${salt.name} and I'm not salty about it! Discover yours:`,
     url: LINK,
   };
 
-  navigator.share(data);
+  const response = await fetch(cardImgUrl);
+  const blob = await response.blob();
+  const file = new File([blob], `${salt.name}.png`, { type: blob.type });
+
+  const canShareFiles =
+    navigator.canShare && navigator.canShare({ files: [file] });
+
+  await navigator.share({
+    ...data,
+    ...(canShareFiles ? { files: [file] } : {}),
+  });
+  // navigator.share(data);
 }
 
 async function copyToClipboard(message) {
