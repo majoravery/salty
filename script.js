@@ -1,4 +1,4 @@
-const LINK = "";
+const LINK = "https://majoravery.github.io/salty";
 
 // image filename format `${salt name}-${cuisine index}.png`
 const SALTS = {
@@ -320,6 +320,7 @@ const QUESTIONS = [
 ];
 
 let activeQuestion = -1;
+let cardImgUrl;
 let cuisine;
 let salt;
 
@@ -425,7 +426,10 @@ function endQuiz() {
   );
   const axis2 = MARKERS.a > MARKERS.b ? "a" : "b";
   const axis3 = MARKERS.y > MARKERS.z ? "y" : "z";
+
   salt = MAPPING_SALTS[axis1][axis2][axis3];
+  // `images/cards/${salt.image}-${cuisine}.png`;
+  cardImgUrl = `images/cards/${salt.image}.png`;
 
   showResults();
 }
@@ -442,8 +446,7 @@ function showResults() {
   }, random(1200, 2500));
 
   const imageEl = imageDivEl.querySelector("img");
-  imageEl.src = `images/cards/${salt.image}.png`;
-  // image.src = `images/cards/${salt.image}-${cuisine}.png`;
+  imageEl.src = cardImgUrl;
   imageEl.alt = `You are ${salt.name}!`;
 
   // add download card button (needs fixing but for now imma leave it)
@@ -459,27 +462,50 @@ function showResults() {
 
   // add share results button
   const shareCta = "Share with friends!";
-  const share = document.createElement("button");
-  share.innerHTML = shareCta;
-  share.onclick = async function () {
-    const message = `My salt identity is ${salt.name} and I'm not salty about it. Find out what salt you are at ${LINK}`;
+  const shareButton = document.createElement("button");
+  shareButton.innerHTML = shareCta;
+  shareButton.onclick = async function () {
+    const message = `My salt identity is ${salt.name} and I'm not salty about it. Find out what salt you are:`;
     try {
-      await navigator.clipboard.writeText(message);
-      share.innerHTML = "Copied to clipboard!";
-      setTimeout(() => {
-        share.innerHTML = shareCta;
-      }, 2000);
+      await share(message);
     } catch (error) {
-      share.innerHTML = "Couldn't copy to clipboard";
-      console.error("Unable to copy to clipboard");
-      // throw new Error("Unable to copy to clipboard");
+      console.error(error);
+
+      try {
+        await copyToClipboard(message);
+        shareButton.innerHTML = "Copied to clipboard!";
+        setTimeout(() => {
+          shareButton.innerHTML = shareCta;
+        }, 2000);
+      } catch (error) {
+        console.error(error);
+        shareButton.innerHTML = "Couldn't copy to clipboard :-(";
+      }
     }
   };
-  buttonsEl.appendChild(share);
+  buttonsEl.appendChild(shareButton);
 
   console.log(
     `${MARKERS.e1}-${MARKERS.e2}-${MARKERS.e3} / ${MARKERS.a}-${MARKERS.b} / ${MARKERS.y}-${MARKERS.z}`
   );
+}
+
+function share() {
+  if (!navigator.share) {
+    throw "navigator.share not supported";
+  }
+
+  const data = {
+    title: "What Salt Are You?",
+    text: `My salt identity is ${salt.name} and I'm not salty about it. Find out what salt you are:`,
+    url: LINK,
+  };
+
+  navigator.share(data);
+}
+
+async function copyToClipboard(message) {
+  navigator.clipboard.writeText(`${message} ${LINK}`);
 }
 
 function init() {
