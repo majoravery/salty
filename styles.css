@@ -7,7 +7,7 @@
     --h1-font-size: 1.5rem;
     --h1-letter-spacing: -0.03rem;
     --text-font-size: 1.2rem;
-    --text-delay-font-size: 1.6rem;
+    --text-delay-font-size: 1.8rem;
     --button-font-size: 1rem;
 }
 
@@ -19,7 +19,7 @@
         --h1-font-size: 2rem;
         --h1-letter-spacing: -0.05rem;
         --text-font-size: 1.5rem;
-        --text-delay-font-size: 2rem;
+        --text-delay-font-size: 2.3rem;
         --button-font-size: 1.2rem;
     }
 }
@@ -115,6 +115,21 @@ h1 a {
     text-decoration: inherit;
 }
 
+div#waiting {
+    align-content: center;
+    display: none;
+    grid-column: 1 / -1;
+    grid-row: 2 / -1;
+}
+
+body.delay div#waiting {
+    display: block;
+}
+
+div#waiting p {
+    font-size: var(--text-delay-font-size);
+}
+
 div#image {
     grid-area: image;
     position: relative;
@@ -122,7 +137,15 @@ div#image {
 }
 
 body.landing div#image {
-    display: none;
+    height: 100%;
+    left: 0;
+    margin: auto;
+    /* this number is also in composeLandingPage() fyi */
+    max-width: 1024px;
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: -1;
 }
 
 body.quiz div#image {

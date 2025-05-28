@@ -294,7 +294,7 @@ const QUESTIONS = [
       },
     ],
     preprocessor: () => {
-      // If no tiebreaker is needed, skip question
+      // if no tiebreaker is needed, skip question
       if (
         MARKERS.e1 !== MARKERS.e2 &&
         MARKERS.e1 !== MARKERS.e3 &&
@@ -320,14 +320,6 @@ const QUESTIONS = [
   },
 ];
 
-const OPENERS = [
-  "Your mineral identity awaits",
-  "Because horoscopes weren’t salty enough",
-  "Discover your crystalline personality",
-  "Saltier than your zodiac sign",
-  "Time to season your self-awareness",
-];
-
 let cuisine;
 let salt;
 let activeQuestion = -1;
@@ -335,6 +327,11 @@ let activeQuestion = -1;
 function loadQuiz() {
   console.log("loadQuiz");
   document.querySelector("body").classList.remove("landing");
+  const image = document.querySelector("#image");
+  const imgOld = document.querySelector("#image img");
+  image.removeChild(imgOld);
+  const img = document.createElement("img");
+  image.appendChild(img);
   goToNextQuestion();
   document.querySelector("body").classList.add("quiz");
 }
@@ -417,30 +414,29 @@ function endQuiz() {
   const axis3 = MARKERS.y > MARKERS.z ? "y" : "z";
   salt = MAPPING_SALTS[axis1][axis2][axis3];
 
-  showDelay();
-  setTimeout(showResults, random(1200, 2500));
-}
-
-function showDelay() {
-  clearScreen();
-  document.querySelector("body").classList.remove("quiz");
-  document.querySelector("#image img").src = "";
-  document.querySelector("#text").innerHTML =
-    "Determining your mineral identity...";
-  document.querySelector("body").classList.add("delay");
+  showResults();
 }
 
 function showResults() {
   clearScreen();
-  document.querySelector("body").classList.remove("delay");
-  document.querySelector(
-    "#image img"
-  ).src = `images/archetypes/${salt.image}-${cuisine}.png`;
-  document.querySelector("#image img").alt = `You are ${salt.name}!`;
+  const body = document.querySelector("body");
+  const image = document.querySelector("#image img");
 
-  // download card (needs fixing but for now imma leave it)
+  // show delay screen to mimic computation + allow preloading
+  body.classList.remove("quiz");
+  body.classList.add("delay");
+  setTimeout(() => {
+    body.classList.remove("delay");
+    body.classList.add("results");
+  }, random(1200, 2500));
+
+  image.src = `images/cards/${salt.image}.png`;
+  // image.src = `images/cards/${salt.image}-${cuisine}.png`;
+  image.alt = `You are ${salt.name}!`;
+
+  // add download card button (needs fixing but for now imma leave it)
   const hidden = document.createElement("a");
-  hidden.href = `images/archetypes/${encodeURIComponent(salt.image)}`;
+  hidden.href = `images/cards/${encodeURIComponent(salt.image)}`;
   hidden.download = salt.name;
   const download = document.createElement("button");
   download.innerHTML = "Download salt card";
@@ -449,7 +445,7 @@ function showResults() {
   };
   buttons.appendChild(download);
 
-  // share results
+  // add share results button
   const shareCta = "Share with friends!";
   const share = document.createElement("button");
   share.innerHTML = shareCta;
@@ -469,16 +465,33 @@ function showResults() {
   };
   buttons.appendChild(share);
 
-  console.log(MARKERS.e1, MARKERS.e2, MARKERS.e3);
-  console.log(MARKERS.a, MARKERS.b);
-  console.log(MARKERS.y, MARKERS.z);
-  document.querySelector("body").classList.add("results");
+  console.log(
+    `${MARKERS.e1}-${MARKERS.e2}-${MARKERS.e3} / ${MARKERS.a}-${MARKERS.b} / ${MARKERS.y}-${MARKERS.z}`
+  );
 }
 
 function init() {
-  const opener = OPENERS[random(OPENERS.length)];
+  composeLandingPage();
   document.querySelector("#text").innerHTML = opener;
   document.querySelector("#buttons button").onclick = loadQuiz;
+}
+
+function composeLandingPage() {
+  const image = document.querySelector("#image");
+  const saltKeys = Object.keys(SALTS);
+  const key = saltKeys[random(saltKeys.length)];
+
+  const imgLeft = random(Math.min(window.innerWidth, 1024) * 0.7);
+  const imgTop = random(window.innerHeight * 0.35, 16);
+
+  const img = document.createElement("img");
+  img.src = `images/archetypes/${SALTS[key].image}.png`;
+  img.style.left = `${imgLeft}px`;
+  img.style.top = `${imgTop}px`;
+  img.style.transform = `rotate(${0}deg)`;
+  img.style.opacity = "0.3";
+  img.style.width = "30%";
+  image.appendChild(img);
 }
 
 init();
