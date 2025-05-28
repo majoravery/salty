@@ -228,8 +228,7 @@ button:hover {
     background-color: #eeeeee;
 }
 
-button:active,
-button.selected {
+button:active {
     background-color: #dddddd;
 }
 

@@ -383,6 +383,7 @@ function loadQuestion(index) {
   }
 
   clearScreen();
+  window.scrollTo(0, 0);
 
   textEl.innerHTML = question;
   imageDivEl.querySelector("img").src = `images/questions/${image}`;
@@ -390,8 +391,6 @@ function loadQuestion(index) {
     const button = document.createElement("button");
     button.innerHTML = text;
     button.onclick = function () {
-      button.classList.add("selected");
-
       if (markers) {
         makeSelection(markers);
       }
