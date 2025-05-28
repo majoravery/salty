@@ -443,6 +443,7 @@ function showResults() {
     bodyEl.classList.remove("delay");
     bodyEl.classList.add("results");
   }, random(1200, 2500));
+  // }, random(1200, 2500));
 
   const imageEl = imageDivEl.querySelector("img");
   imageEl.src = cardImgUrl;

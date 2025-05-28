@@ -7,7 +7,6 @@
     --h1-font-size: 1.5rem;
     --h1-letter-spacing: -0.03rem;
     --text-font-size: 1rem;
-    --text-delay-font-size: 1.8rem;
     --button-font-size: 0.85rem;
 }
 
@@ -19,7 +18,6 @@
         --h1-font-size: 2rem;
         --h1-letter-spacing: -0.05rem;
         --text-font-size: 1.5rem;
-        --text-delay-font-size: 2.3rem;
         --button-font-size: 1.2rem;
     }
 }
@@ -126,10 +124,6 @@ body.delay div#waiting {
     display: block;
 }
 
-div#waiting p {
-    font-size: var(--text-delay-font-size);
-}
-
 div#image {
     grid-area: image;
     position: relative;
@@ -176,17 +170,12 @@ body.quiz div#image img {
 p#text {
     align-self: center;
     font-size: var(--text-font-size);
-    grid-area: 1rem 0;
+    grid-area: text;
+    margin: 1rem 0 0;
 }
 
 body.landing p#text {
     display: none;
-}
-
-body.delay p#text {
-    font-size: var(--text-delay-font-size);
-    margin: auto;
-    max-width: 60vw;
 }
 
 body.results p#text {
@@ -237,6 +226,7 @@ button+button {
 }
 
 p#disclaimer {
+    align-self: self-end;
     color: rgb(73, 42, 42);
     font-family: "Funnel Sans", sans-serif;
     font-optical-sizing: auto;
@@ -246,9 +236,7 @@ p#disclaimer {
 }
 
 body.landing p#disclaimer {
-    align-self: self-end;
     display: block;
-    grid-area: buttons;
 }
 
 body.results p#disclaimer {
