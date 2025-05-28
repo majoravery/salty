@@ -175,7 +175,7 @@ p#text {
     align-self: center;
     font-size: var(--text-font-size);
     grid-area: text;
-    margin: 1rem 0 0;
+    margin-top: 0.5rem;
 }
 
 body.landing p#text {

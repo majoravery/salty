@@ -383,7 +383,7 @@ function loadQuestion(index) {
   }
 
   clearScreen();
-  window.scrollTo(0, 0);
+  setTimeout(() => window.scroll({ top: -1 }));
 
   textEl.innerHTML = question;
   imageDivEl.querySelector("img").src = `images/questions/${image}`;
