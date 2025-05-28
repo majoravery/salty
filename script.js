@@ -145,11 +145,13 @@ const QUESTIONS = [
       },
     ],
     postprocessor: (selected) => {
-      delete QUESTIONS[INDEX_TIEBREAKER].answers[0].options[selected];
-      const { options, markers } = QUESTIONS[INDEX_TIEBREAKER].answers[0];
+      const ansIdxSugar = 0;
+      delete QUESTIONS[INDEX_TIEBREAKER].answers[ansIdxSugar].options[selected];
+      const { options, markers } =
+        QUESTIONS[INDEX_TIEBREAKER].answers[ansIdxSugar];
       const texts = options.filter((option) => !!option.length);
 
-      QUESTIONS[INDEX_TIEBREAKER].answers[0] = {
+      QUESTIONS[INDEX_TIEBREAKER].answers[ansIdxSugar] = {
         text: texts[random(texts.length)],
         markers,
       };
@@ -175,19 +177,15 @@ const QUESTIONS = [
       },
     ],
     postprocessor: (selected) => {
+      const ansIdxSprinkles = 1;
+      const { options } = QUESTIONS[INDEX_TIEBREAKER].answers[ansIdxSprinkles];
+
       // user said yes to conga
       if (selected === 0) {
-        delete QUESTIONS[INDEX_TIEBREAKER].answers[1].options[0]; // yes
+        QUESTIONS[INDEX_TIEBREAKER].answers[ansIdxSprinkles].text = options[1];
       } else {
-        delete QUESTIONS[INDEX_TIEBREAKER].answers[1].options[1]; // no
+        QUESTIONS[INDEX_TIEBREAKER].answers[ansIdxSprinkles].text = options[0];
       }
-      const { options, markers } = QUESTIONS[INDEX_TIEBREAKER].answers[1];
-      const text = options.filter((option) => !!option.length)[0];
-
-      QUESTIONS[INDEX_TIEBREAKER].answers[1] = {
-        text,
-        markers,
-      };
     },
   },
   {
@@ -202,11 +200,13 @@ const QUESTIONS = [
       },
     ],
     postprocessor: (selected) => {
-      delete QUESTIONS[INDEX_TIEBREAKER].answers[2].options[selected];
-      const { options, markers } = QUESTIONS[INDEX_TIEBREAKER].answers[2];
+      const ansIdxPep = 2;
+      delete QUESTIONS[INDEX_TIEBREAKER].answers[ansIdxPep].options[selected];
+      const { options, markers } =
+        QUESTIONS[INDEX_TIEBREAKER].answers[ansIdxPep];
       const text = options.filter((option) => !!option.length)[0];
 
-      QUESTIONS[INDEX_TIEBREAKER].answers[2] = {
+      QUESTIONS[INDEX_TIEBREAKER].answers[ansIdxPep] = {
         text,
         markers,
       };
@@ -262,7 +262,6 @@ const QUESTIONS = [
     ],
     postprocessor: (selectedIndex) => {
       cuisine = selectedIndex;
-      console.log(cuisine);
     },
   },
   {
@@ -320,34 +319,52 @@ const QUESTIONS = [
   },
 ];
 
+let activeQuestion = -1;
 let cuisine;
 let salt;
-let activeQuestion = -1;
+
+const bodyEl = document.querySelector("body");
+const buttonsEl = document.querySelector("div#buttons");
+const imageDivEl = document.querySelector("#image");
+const textEl = document.querySelector("p#text");
+
+function composeLandingPage() {
+  const saltKeys = Object.keys(SALTS);
+  const key = saltKeys[random(saltKeys.length)];
+
+  const imgLeft = random(Math.min(window.innerWidth, 1024) * 0.7);
+  const imgTop = random(window.innerHeight * 0.35, 16);
+
+  const img = document.createElement("img");
+  img.src = `images/archetypes/${SALTS[key].image}.png`;
+  img.style.left = `${imgLeft}px`;
+  img.style.top = `${imgTop}px`;
+  img.style.transform = `rotate(${0}deg)`;
+  img.style.opacity = "0.3";
+  img.style.width = "30%";
+  imageDivEl.appendChild(img);
+}
 
 function loadQuiz() {
-  console.log("loadQuiz");
-  document.querySelector("body").classList.remove("landing");
-  const image = document.querySelector("#image");
-  const imgOld = document.querySelector("#image img");
-  image.removeChild(imgOld);
+  bodyEl.classList.remove("landing");
+  // prevents flash
+  imageDivEl.removeChild(imageDivEl.firstChild);
   const img = document.createElement("img");
-  image.appendChild(img);
+  imageDivEl.appendChild(img);
   goToNextQuestion();
-  document.querySelector("body").classList.add("quiz");
+  bodyEl.classList.add("quiz");
 }
 
 function goToNextQuestion() {
-  console.log("goToNextQuestion");
   activeQuestion++;
   loadQuestion(activeQuestion);
   return;
 }
 
 function loadQuestion(index) {
-  console.log("loadQuestion", activeQuestion);
-  // if (isNaN(index) || index < 0) {
-  //   throw new Error(`loadQuestions cannot load question index ${index}`);
-  // }
+  if (isNaN(index) || index < 0) {
+    console.error(`loadQuestions cannot load question index ${index}`);
+  }
 
   if (index === QUESTIONS.length) {
     endQuiz();
@@ -366,13 +383,11 @@ function loadQuestion(index) {
 
   clearScreen();
 
-  document.querySelector("#text").innerHTML = question;
-  document.querySelector("#image img").src = `images/questions/${image}`;
+  textEl.innerHTML = question;
+  imageDivEl.querySelector("img").src = `images/questions/${image}`;
   answers.forEach(({ text, markers }, indexAns) => {
     const button = document.createElement("button");
     button.innerHTML = text;
-    const buttons = document.querySelector("#buttons");
-    buttons.appendChild(button);
     button.onclick = function () {
       button.classList.add("selected");
 
@@ -387,23 +402,21 @@ function loadQuestion(index) {
       // selection is made, go to next question
       goToNextQuestion();
     };
+    buttonsEl.appendChild(button);
   });
 }
 
 function clearScreen() {
-  document.querySelector("#text").innerHTML = "";
-  const buttons = document.querySelector("#buttons");
-  while (buttons.firstChild) {
-    buttons.removeChild(buttons.firstChild);
+  textEl.innerHTML = "";
+  while (buttonsEl.firstChild) {
+    buttonsEl.removeChild(buttonsEl.firstChild);
   }
 }
 
 function makeSelection(markers) {
-  console.log("makeSelection");
   markers.forEach((marker) => {
     MARKERS[marker]++;
   });
-  console.log(MARKERS);
 }
 
 function endQuiz() {
@@ -419,20 +432,19 @@ function endQuiz() {
 
 function showResults() {
   clearScreen();
-  const body = document.querySelector("body");
-  const image = document.querySelector("#image img");
 
   // show delay screen to mimic computation + allow preloading
-  body.classList.remove("quiz");
-  body.classList.add("delay");
+  bodyEl.classList.remove("quiz");
+  bodyEl.classList.add("delay");
   setTimeout(() => {
-    body.classList.remove("delay");
-    body.classList.add("results");
+    bodyEl.classList.remove("delay");
+    bodyEl.classList.add("results");
   }, random(1200, 2500));
 
-  image.src = `images/cards/${salt.image}.png`;
+  const imageEl = imageDivEl.querySelector("img");
+  imageEl.src = `images/cards/${salt.image}.png`;
   // image.src = `images/cards/${salt.image}-${cuisine}.png`;
-  image.alt = `You are ${salt.name}!`;
+  imageEl.alt = `You are ${salt.name}!`;
 
   // add download card button (needs fixing but for now imma leave it)
   const hidden = document.createElement("a");
@@ -443,7 +455,7 @@ function showResults() {
   download.onclick = function () {
     hidden.click();
   };
-  buttons.appendChild(download);
+  buttonsEl.appendChild(download);
 
   // add share results button
   const shareCta = "Share with friends!";
@@ -463,7 +475,7 @@ function showResults() {
       // throw new Error("Unable to copy to clipboard");
     }
   };
-  buttons.appendChild(share);
+  buttonsEl.appendChild(share);
 
   console.log(
     `${MARKERS.e1}-${MARKERS.e2}-${MARKERS.e3} / ${MARKERS.a}-${MARKERS.b} / ${MARKERS.y}-${MARKERS.z}`
@@ -472,26 +484,7 @@ function showResults() {
 
 function init() {
   composeLandingPage();
-  document.querySelector("#text").innerHTML = opener;
-  document.querySelector("#buttons button").onclick = loadQuiz;
-}
-
-function composeLandingPage() {
-  const image = document.querySelector("#image");
-  const saltKeys = Object.keys(SALTS);
-  const key = saltKeys[random(saltKeys.length)];
-
-  const imgLeft = random(Math.min(window.innerWidth, 1024) * 0.7);
-  const imgTop = random(window.innerHeight * 0.35, 16);
-
-  const img = document.createElement("img");
-  img.src = `images/archetypes/${SALTS[key].image}.png`;
-  img.style.left = `${imgLeft}px`;
-  img.style.top = `${imgTop}px`;
-  img.style.transform = `rotate(${0}deg)`;
-  img.style.opacity = "0.3";
-  img.style.width = "30%";
-  image.appendChild(img);
+  buttonsEl.querySelector("button").onclick = loadQuiz;
 }
 
 init();
