@@ -33,6 +33,7 @@ body {
     color: rgb(73, 42, 42);
     font-family: "Funnel Sans", sans-serif;
     font-optical-sizing: auto;
+    font-size: 1rem;
     font-style: normal;
     display: grid;
     gap: 1rem;
@@ -49,7 +50,11 @@ body.landing {
     grid-template-areas:
         "header"
         "buttons";
-    height: 100vh;
+    bottom: 0;
+    left: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
 }
 
 body.quiz {
@@ -74,7 +79,6 @@ body.results {
     grid-template-areas:
         "header"
         "image"
-        "text"
         "buttons";
 }
 
@@ -179,7 +183,7 @@ body.landing p#text {
 }
 
 body.results p#text {
-    margin: 0;
+    display: none;
 }
 
 div#buttons {
@@ -235,10 +239,7 @@ p#disclaimer {
     display: none;
 }
 
-body.landing p#disclaimer {
-    display: block;
-}
-
+body.landing p#disclaimer,
 body.results p#disclaimer {
     display: block;
 }
