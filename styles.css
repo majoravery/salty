@@ -37,6 +37,7 @@ body {
     display: grid;
     gap: 1rem;
     grid-template-columns: 1fr;
+    height: 100%;
     margin: auto;
     max-width: 720px;
     padding: 1rem 24px 1.5rem;
@@ -49,7 +50,7 @@ body.landing {
     grid-template-areas:
         "header"
         "buttons";
-    height: 100vh;
+    max-height: 100vh;
 }
 
 body.quiz {
@@ -66,7 +67,7 @@ body.delay {
     grid-template-areas:
         "header"
         "text";
-    height: 100vh;
+    max-height: 100vh;
 }
 
 body.results {
