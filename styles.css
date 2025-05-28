@@ -6,9 +6,9 @@
     --h1-landing-line-height: 3.8rem;
     --h1-font-size: 1.5rem;
     --h1-letter-spacing: -0.03rem;
-    --text-font-size: 1.2rem;
+    --text-font-size: 1rem;
     --text-delay-font-size: 1.8rem;
-    --button-font-size: 1rem;
+    --button-font-size: 0.85rem;
 }
 
 @media (min-width: 640px) {
@@ -149,7 +149,7 @@ body.landing div#image {
 }
 
 body.quiz div#image {
-    padding-top: 50%;
+    padding-top: 60%;
 }
 
 body.results div#image {
@@ -170,7 +170,7 @@ div#image img {
 body.quiz div#image img {
     margin: auto;
     right: 0;
-    width: 50%;
+    width: 60%;
 }
 
 p#text {
