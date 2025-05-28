@@ -337,7 +337,8 @@ function composeLandingPage() {
   const imgTop = random(window.innerHeight * 0.35, 16);
 
   const img = document.createElement("img");
-  img.src = `images/archetypes/${SALTS[key].image}.png`;
+  img.src = `images/landing.png`;
+  // img.src = `images/archetypes/${SALTS[key].image}.png`;
   img.style.left = `${imgLeft}px`;
   img.style.top = `${imgTop}px`;
   img.style.transform = `rotate(${0}deg)`;
