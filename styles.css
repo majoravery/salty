@@ -149,7 +149,7 @@ body.landing div#image {
 }
 
 body.quiz div#image {
-    padding-top: 100%;
+    padding-top: 50%;
 }
 
 body.results div#image {
@@ -165,6 +165,12 @@ div#image img {
     position: absolute;
     top: 0;
     width: 100%;
+}
+
+body.quiz div#image img {
+    margin: auto;
+    right: 0;
+    width: 50%;
 }
 
 p#text {
