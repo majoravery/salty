@@ -176,8 +176,7 @@ body.quiz div#image img {
 p#text {
     align-self: center;
     font-size: var(--text-font-size);
-    grid-area: text;
-    margin: 1.5rem 0 1rem;
+    grid-area: 1rem 0;
 }
 
 body.landing p#text {
@@ -212,7 +211,7 @@ body.delay div#buttons {
 button {
     background-color: #ffffff;
     border-radius: 0.75rem;
-    border: 4px solid rgb(73, 42, 42);
+    border: 3px solid rgb(73, 42, 42);
     color: rgb(73, 42, 42);
     cursor: pointer;
     font-family: "Funnel Sans", sans-serif;
@@ -235,7 +234,7 @@ button.selected {
 }
 
 button+button {
-    margin-top: 1rem;
+    margin-top: 0.85rem;
 }
 
 p#disclaimer {
