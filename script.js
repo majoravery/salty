@@ -293,6 +293,10 @@ const QUESTIONS = [
       },
     ],
     preprocessor: () => {
+      console.log(
+        `intellectual ${MARKERS.e1} spiritual ${MARKERS.e2} instinctual ${MARKERS.e3} / structure ${MARKERS.a} flow ${MARKERS.b} / logic ${MARKERS.y} emotion ${MARKERS.z}`
+      );
+
       // if no tiebreaker is needed, skip question
       if (
         MARKERS.e1 !== MARKERS.e2 &&
@@ -383,7 +387,6 @@ function loadQuestion(index) {
   }
 
   clearScreen();
-  setTimeout(() => window.scroll({ top: -1 }));
 
   textEl.innerHTML = question;
   imageDivEl.querySelector("img").src = `images/questions/${image}`;
@@ -411,6 +414,7 @@ function clearScreen() {
   while (buttonsEl.firstChild) {
     buttonsEl.removeChild(buttonsEl.firstChild);
   }
+  setTimeout(() => window.scroll({ top: -1 }));
 }
 
 function makeSelection(markers) {
@@ -436,20 +440,30 @@ function endQuiz() {
 function showResults() {
   clearScreen();
 
-  // show delay screen to mimic computation + allow preloading
+  // show delay screen to simulate computation + allow preloading
   bodyEl.classList.remove("quiz");
   bodyEl.classList.add("delay");
   setTimeout(() => {
     bodyEl.classList.remove("delay");
     bodyEl.classList.add("results");
   }, random(1200, 2500));
-  // }, random(1200, 2500));
 
+  createCard();
+  addDownloadButton();
+  addShareButton();
+
+  console.log(
+    `intellectual ${MARKERS.e1} spiritual ${MARKERS.e2} instinctual ${MARKERS.e3} / structure ${MARKERS.a} flow ${MARKERS.b} / logic ${MARKERS.y} emotion ${MARKERS.z}`
+  );
+}
+
+function createCard() {
   const imageEl = imageDivEl.querySelector("img");
   imageEl.src = cardImgUrl;
   imageEl.alt = `You are ${salt.name}!`;
+}
 
-  // add download card button
+function addDownloadButton() {
   const hidden = document.createElement("a");
   hidden.href = cardImgUrl;
   hidden.download = salt.name;
@@ -459,8 +473,9 @@ function showResults() {
     hidden.click();
   };
   buttonsEl.appendChild(download);
+}
 
-  // add share results button
+function addShareButton() {
   const shareCta = "Share with friends!";
   const shareButton = document.createElement("button");
   shareButton.innerHTML = shareCta;
@@ -484,10 +499,6 @@ function showResults() {
     }
   };
   buttonsEl.appendChild(shareButton);
-
-  console.log(
-    `${MARKERS.e1}-${MARKERS.e2}-${MARKERS.e3} / ${MARKERS.a}-${MARKERS.b} / ${MARKERS.y}-${MARKERS.z}`
-  );
 }
 
 async function share() {
@@ -512,7 +523,6 @@ async function share() {
     ...data,
     ...(canShareFiles ? { files: [file] } : {}),
   });
-  // navigator.share(data);
 }
 
 async function copyToClipboard(message) {
