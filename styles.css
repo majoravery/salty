@@ -33,7 +33,7 @@ body {
     color: rgb(73, 42, 42);
     font-family: "Funnel Sans", sans-serif;
     font-optical-sizing: auto;
-    font-size: 1rem;
+    font-size: var(--text-font-size);
     font-style: normal;
     display: grid;
     gap: 1rem;

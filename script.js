@@ -125,7 +125,6 @@ const QUESTIONS = [
         markers: ["e1"],
       },
       { text: "OMG another Salt buddy! *oblivious*", markers: ["e2"] },
-      { text: "Dodge her because you can’t trust strangers", markers: ["e3"] },
     ],
   },
   {
