@@ -1,22 +1,129 @@
 const LINK = "https://majoravery.github.io/salty";
+const CARD_WIDTH = 1620;
+const CARD_HEIGHT = 2025;
 
 // image filename format `${salt name}-${cuisine index}.png`
 const SALTS = {
-  SODIUM_CHLORIDE: { name: "Sodium chloride", image: "sodium-chloride" },
-  KOSHER_SALT: { name: "Kosher salt", image: "kosher-salt" },
-  KALA_NAMAK: { name: "Kala namak", image: "kala-namak" },
-  SMOKED_SALT: { name: "Smoked salt", image: "smoked-salt" },
-  MOSHIO_SALT: { name: "Moshio salt", image: "moshio-salt" },
-  YUZU_SALT: { name: "Yuzu salt", image: "yuzu-salt" },
+  SODIUM_CHLORIDE: {
+    name: "Sodium chloride",
+    image: "sodium-chloride",
+    cuisine: [
+      "foot soak",
+      "muscle recovery bath",
+      "detoxifying spa",
+      "sensory deprivation tank",
+    ],
+  },
+  KOSHER_SALT: {
+    name: "Kosher salt",
+    image: "kosher-salt",
+    cuisine: [
+      "shiopan",
+      "lamb and eggplant pide",
+      "cobb salad",
+      "rice fritters with chive cream, smoked salmon and lime zest",
+    ],
+  },
+  KALA_NAMAK: {
+    name: "Kala namak",
+    image: "kala-namak",
+    cuisine: [
+      "banh mi",
+      "shakshuka",
+      "summer salad with feta",
+      "seared blackfish with tomato water, herbs and olives",
+    ],
+  },
+  SMOKED_SALT: {
+    name: "Smoked salt",
+    image: "smoked-salt",
+    cuisine: [
+      "grilled steak",
+      "ayam penyet",
+      "pearl couscous and snap pea salad",
+      "arroz rojo with charred corn and chipotle black beans",
+    ],
+  },
+  MOSHIO_SALT: {
+    name: "Moshio salt",
+    image: "moshio-salt",
+    cuisine: [
+      "deviled eggs",
+      "pav bhaji",
+      "gombaleves",
+      "sake-glazed pollock with purple vegetables",
+    ],
+  },
+  YUZU_SALT: {
+    name: "Yuzu salt",
+    image: "yuzu-salt",
+    cuisine: [
+      "roast chicken",
+      "mee goreng",
+      "kimchi pancakes",
+      "harissa-marinated lamb with mint chutney",
+    ],
+  },
   HIMALAYAN_PINK_SALT: {
     name: "Himalayan pink salt",
     image: "himalayan-pink-salt",
+    cuisine: [
+      "naporitan",
+      "lamb tagine",
+      "teriyaki tofu with sesame",
+      "abbacchio alla cacciatora",
+    ],
   },
-  FLEUR_DE_SEL: { name: "Fleur de sel", image: "fleur-de-sel" },
-  TABLE_SALT: { name: "Table salt", image: "table-salt" },
-  SEL_GRIS: { name: "Sel gris", image: "sel-gris" },
-  EPSOM_SALT: { name: "Epsom salt", image: "epsom-salt" },
-  FLAKY_SALT: { name: "Flaky salt", image: "flaky-salt" },
+  FLEUR_DE_SEL: {
+    name: "Fleur de sel",
+    image: "fleur-de-sel",
+    cuisine: [
+      "duck confit",
+      "harira soup",
+      "ratatouille",
+      "sous vide salted cod, avocado and sea vegetables",
+    ],
+  },
+  TABLE_SALT: {
+    name: "Table salt",
+    image: "table-salt",
+    cuisine: [
+      "sausage carbonara",
+      "beef brisket rendang",
+      "black bean burger",
+      "char siu pork neck with smoky tomato relish",
+    ],
+  },
+  SEL_GRIS: {
+    name: "Sel gris",
+    image: "sel-gris",
+    cuisine: [
+      "salt water gargle",
+      "defrost roads",
+      "treat poison ivy irritation",
+      "help dishwashers clean better",
+    ],
+  },
+  EPSOM_SALT: {
+    name: "Epsom salt",
+    image: "epsom-salt",
+    cuisine: [
+      "egusi soup",
+      "shwarma wrap",
+      "french onion soup",
+      "red snapper baked in a salt pastry crust",
+    ],
+  },
+  FLAKY_SALT: {
+    name: "Flaky salt",
+    image: "flaky-salt",
+    cuisine: [
+      "spicy and citrusy wings",
+      "beef shatkora",
+      "winter coleslaw",
+      "lobster carpaccio, yuzu amarillo vinaigrette and yuzu ponzu salsa",
+    ],
+  },
 };
 
 const MARKERS = {
@@ -260,75 +367,72 @@ const QUESTIONS = [
       },
     ],
     postprocessor: (selectedIndex) => {
-      cuisine = selectedIndex;
+      cuisineIndex = selectedIndex;
     },
   },
-  {
-    question:
-      "Before you hit the food, time slows down. You see all the paths you could have taken. One stands out:",
-    image: "11.png",
-    answers: [
-      {
-        options: [
-          "Befriending Sugar",
-          "Flirting with Sugar",
-          "Betraying Sugar",
-        ],
-        markers: ["e2"],
-      },
-      {
-        options: [
-          "Saying yes to the conga line",
-          "Saying no to the conga line",
-        ],
-        markers: ["e3"],
-      },
-      {
-        options: [
-          "Taking Peppercorn’s words with a grain of salt",
-          "Joining Peppercorn in finding the other world",
-        ],
-        markers: ["e1"],
-      },
-    ],
-    preprocessor: () => {
-      console.log(
-        `intellectual ${MARKERS.e1} spiritual ${MARKERS.e2} instinctual ${MARKERS.e3} / structure ${MARKERS.a} flow ${MARKERS.b} / logic ${MARKERS.y} emotion ${MARKERS.z}`
-      );
-
-      // if no tiebreaker is needed, skip question
-      if (
-        MARKERS.e1 !== MARKERS.e2 &&
-        MARKERS.e1 !== MARKERS.e3 &&
-        MARKERS.e2 !== MARKERS.e3
-      ) {
-        goToNextQuestion();
-        return 1;
-      }
-    },
-  },
-  {
-    question:
-      "You touch down. Warmth engulfs you. Your crystals break down and infuse the dish with flavour. As you disintegrate, you think…",
-    image: "12.png",
-    answers: [
-      { text: "I have fulfilled my purpose in this world" },
-      {
-        text: "Y’all bishes better be grateful I flavoured you good",
-      },
-      { text: "Next time, I’m being a chilli flake" },
-      { text: "Till we meet again, my Salt mates 💗" },
-    ],
-  },
+  // {
+  //   question:
+  //     "Before you hit the food, time slows down. You see all the paths you could have taken. One stands out:",
+  //   image: "11.png",
+  //   answers: [
+  //     {
+  //       options: [
+  //         "Befriending Sugar",
+  //         "Flirting with Sugar",
+  //         "Betraying Sugar",
+  //       ],
+  //       markers: ["e2"],
+  //     },
+  //     {
+  //       options: [
+  //         "Saying yes to the conga line",
+  //         "Saying no to the conga line",
+  //       ],
+  //       markers: ["e3"],
+  //     },
+  //     {
+  //       options: [
+  //         "Taking Peppercorn’s words with a grain of salt",
+  //         "Joining Peppercorn in finding the other world",
+  //       ],
+  //       markers: ["e1"],
+  //     },
+  //   ],
+  //   preprocessor: () => {
+  //     // if no tiebreaker is needed, skip question
+  //     if (
+  //       MARKERS.e1 !== MARKERS.e2 &&
+  //       MARKERS.e1 !== MARKERS.e3 &&
+  //       MARKERS.e2 !== MARKERS.e3
+  //     ) {
+  //       goToNextQuestion();
+  //       return 1;
+  //     }
+  //   },
+  // },
+  // {
+  //   question:
+  //     "You touch down. Warmth engulfs you. Your crystals break down and infuse the dish with flavour. As you disintegrate, you think…",
+  //   image: "12.png",
+  //   answers: [
+  //     { text: "I have fulfilled my purpose in this world" },
+  //     {
+  //       text: "Y’all bishes better be grateful I flavoured you good",
+  //     },
+  //     { text: "Next time, I’m being a chilli flake" },
+  //     { text: "Till we meet again, my Salt mates 💗" },
+  //   ],
+  // },
 ];
 
 let activeQuestion = -1;
 let cardImgUrl;
-let cuisine;
+let cuisineIndex;
 let salt;
 
 const bodyEl = document.querySelector("body");
 const buttonsEl = document.querySelector("div#buttons");
+const canvasEl = document.querySelector("canvas");
 const imageDivEl = document.querySelector("#image");
 const textEl = document.querySelector("p#text");
 
@@ -447,29 +551,62 @@ function showResults() {
     bodyEl.classList.add("results");
   }, random(1200, 2500));
 
-  createCard();
+  displayCard();
   addDownloadButton();
   addShareButton();
 
   console.log(
-    `intellectual ${MARKERS.e1} spiritual ${MARKERS.e2} instinctual ${MARKERS.e3} / structure ${MARKERS.a} flow ${MARKERS.b} / logic ${MARKERS.y} emotion ${MARKERS.z}`
+    `${salt.name}:
+intellectual ${MARKERS.e1} spiritual ${MARKERS.e2} instinctual ${MARKERS.e3} / structure ${MARKERS.a} flow ${MARKERS.b} / logic ${MARKERS.y} emotion ${MARKERS.z}`
   );
 }
 
-function createCard() {
-  const imageEl = imageDivEl.querySelector("img");
-  imageEl.src = cardImgUrl;
-  imageEl.alt = `You are ${salt.name}!`;
+function displayCard() {
+  const CANVAS_WIDTH = canvasEl.parentElement.getBoundingClientRect().width;
+  const scale = CANVAS_WIDTH / CARD_WIDTH;
+  canvasEl.style.transformOrigin = "0 0";
+  canvasEl.style.transform = `scale(${scale})`;
+
+  const context = canvasEl.getContext("2d", { alpha: false });
+  context.canvas.width = CARD_WIDTH;
+  context.canvas.height = CARD_HEIGHT;
+
+  // TODO: some serving suggestion is too long
+  const imageObj = new Image();
+  imageObj.onload = () => embedServSuggestion(context, imageObj, scale);
+  imageObj.src = cardImgUrl;
+}
+
+function embedServSuggestion(context, imageObj, scale) {
+  const FONT_SIZE = 24;
+
+  // measure width of cuisine text
+  const text = salt.cuisine[cuisineIndex];
+  context.font = `${FONT_SIZE / scale}px 'Funnel Sans', sans-serif`;
+  context.fontKerning = -1;
+  context.letterSpacing = -1;
+  const { width: textWidth } = context.measureText(text);
+
+  context.drawImage(imageObj, 0, 0, CARD_WIDTH, CARD_HEIGHT);
+  context.fillSTyle = "#000000";
+  context.fillText(
+    text,
+    Math.floor(CARD_WIDTH * 0.5 - textWidth * 0.5),
+    Math.floor(CARD_HEIGHT * 0.91)
+  );
 }
 
 function addDownloadButton() {
-  const hidden = document.createElement("a");
-  hidden.href = cardImgUrl;
-  hidden.download = salt.name;
   const download = document.createElement("button");
   download.innerHTML = "Download salt card";
   download.onclick = function () {
-    hidden.click();
+    canvasEl.toBlob((blob) => {
+      const hidden = document.createElement("a");
+      hidden.download = salt.name;
+      // TODO: image size from here is almost 4x that of original image, find ways to optimise it
+      hidden.href = URL.createObjectURL(blob);
+      hidden.click();
+    });
   };
   buttonsEl.appendChild(download);
 }

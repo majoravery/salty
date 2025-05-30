@@ -152,6 +152,7 @@ body.quiz div#image {
 
 body.results div#image {
     padding-top: 125%;
+    display: none;
 }
 
 body.delay div#image {
@@ -169,6 +170,26 @@ body.quiz div#image img {
     margin: auto;
     right: 0;
     width: 60%;
+}
+
+div#canvas,
+div#canvas canvas {
+    display: none;
+}
+
+body.results div#canvas {
+    display: block;
+    grid-area: image;
+    padding-top: 125%;
+    position: relative;
+    width: 100%;
+}
+
+body.results div#canvas canvas {
+    display: block;
+    left: 0;
+    position: absolute;
+    top: 0;
 }
 
 p#text {
@@ -234,11 +255,11 @@ button+button {
 p#disclaimer {
     align-self: self-end;
     color: rgb(73, 42, 42);
+    display: none;
     font-family: "Funnel Sans", sans-serif;
     font-optical-sizing: auto;
     font-size: 0.8rem;
     font-style: normal;
-    display: none;
 }
 
 body.landing p#disclaimer,
