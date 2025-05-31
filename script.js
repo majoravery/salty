@@ -1,4 +1,4 @@
-const LINK = "https://majoravery.github.io/salty";
+const LINK = "https://whatsaltareyou.com";
 const CARD_WIDTH = 1620;
 const CARD_HEIGHT = 2025;
 const SERV_SUGGESTION_MAX_WIDTH = 1200;
