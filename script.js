@@ -428,16 +428,16 @@ const QUESTIONS = [
   },
 ];
 
-let activeQuestion = -1;
-let cardImgUrl;
-let cuisineIndex;
-let salt;
-
 const bodyEl = document.querySelector("body");
 const buttonsEl = document.querySelector("div#buttons");
 const canvasEl = document.querySelector("canvas");
 const imageDivEl = document.querySelector("#image");
 const textEl = document.querySelector("p#text");
+
+let activeQuestion = -1;
+let cardImgUrl;
+let cuisineIndex;
+let salt;
 
 function composeLandingPage() {
   const saltKeys = Object.keys(SALTS);
@@ -570,23 +570,26 @@ function createCard() {
   const contentWidth = document
     .querySelector("header")
     .getBoundingClientRect().width;
-  const scale = contentWidth / CARD_WIDTH;
+  const canvasScale = Math.round((contentWidth / CARD_WIDTH) * 1000) / 1000;
   canvasEl.style.transformOrigin = "0 0";
-  canvasEl.style.transform = `scale(${scale})`;
+  canvasEl.style.transform = `scale(${canvasScale})`;
 
   const context = canvasEl.getContext("2d", { alpha: false });
   context.canvas.width = CARD_WIDTH;
   context.canvas.height = CARD_HEIGHT;
 
   const imageObj = new Image();
-  imageObj.onload = () => embedServSuggestion(context, imageObj, scale);
+  imageObj.onload = () => embedServSuggestion(context, imageObj, canvasScale);
   imageObj.src = cardImgUrl;
 }
 
-function embedServSuggestion(context, imageObj, scale) {
+function embedServSuggestion(context, imageObj, canvasScale) {
+  const fontSizeScale =
+    // 720 is max width
+    Math.round((bodyEl.getBoundingClientRect().width / 720) * 1000) / 1000;
   context.fillSTyle = "#000000";
   context.font = `${
-    SERV_SUGGESTION_FONT_SIZE / scale
+    (SERV_SUGGESTION_FONT_SIZE / canvasScale) * fontSizeScale
   }px 'Funnel Sans', sans-serif`;
   context.fontKerning = -1;
   context.letterSpacing = -1;
