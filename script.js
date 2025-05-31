@@ -435,7 +435,6 @@ const imageDivEl = document.querySelector("#image");
 const textEl = document.querySelector("p#text");
 
 let activeQuestion = -1;
-let cardImgUrl;
 let cuisineIndex;
 let salt;
 
@@ -537,8 +536,6 @@ function endQuiz() {
   const axis3 = MARKERS.y > MARKERS.z ? "y" : "z";
 
   salt = MAPPING_SALTS[axis1][axis2][axis3];
-  cardImgUrl = `images/cards/${salt.image}.png`;
-
   showResults();
 }
 
@@ -580,7 +577,7 @@ function createCard() {
 
   const imageObj = new Image();
   imageObj.onload = () => embedServSuggestion(context, imageObj, canvasScale);
-  imageObj.src = cardImgUrl;
+  imageObj.src = `images/cards/${salt.image}.png`;
 }
 
 function embedServSuggestion(context, imageObj, canvasScale) {
@@ -728,7 +725,6 @@ function previewCards() {
   let interval;
   interval = setInterval(() => {
     salt = SALTS[keys[keyIndex]];
-    cardImgUrl = `images/cards/${salt.image}.png`;
     createCard();
     cuisineIndex++;
     if (cuisineIndex === 4) {
