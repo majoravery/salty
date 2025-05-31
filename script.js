@@ -1,127 +1,130 @@
 const LINK = "https://majoravery.github.io/salty";
 const CARD_WIDTH = 1620;
 const CARD_HEIGHT = 2025;
+const SERV_SUGGESTION_MAX_WIDTH = 1200;
+const SERV_SUGGESTION_FONT_SIZE = 19;
+// measured via fontBoundingBoxDescent - fontBoundingBoxAscent from .measureText()
+const SERV_SUGGESTION_FONT_HEIGHT = 34;
 
-// image filename format `${salt name}-${cuisine index}.png`
 const SALTS = {
-  SODIUM_CHLORIDE: {
-    name: "Sodium chloride",
-    image: "sodium-chloride",
-    cuisine: [
-      "foot soak",
-      "muscle recovery bath",
-      "detoxifying spa",
-      "sensory deprivation tank",
-    ],
-  },
-  KOSHER_SALT: {
-    name: "Kosher salt",
-    image: "kosher-salt",
-    cuisine: [
-      "shiopan",
-      "lamb and eggplant pide",
-      "cobb salad",
-      "rice fritters with chive cream, smoked salmon and lime zest",
-    ],
-  },
-  KALA_NAMAK: {
-    name: "Kala namak",
-    image: "kala-namak",
-    cuisine: [
-      "banh mi",
-      "shakshuka",
-      "summer salad with feta",
-      "seared blackfish with tomato water, herbs and olives",
-    ],
-  },
-  SMOKED_SALT: {
-    name: "Smoked salt",
-    image: "smoked-salt",
-    cuisine: [
-      "grilled steak",
-      "ayam penyet",
-      "pearl couscous and snap pea salad",
-      "arroz rojo with charred corn and chipotle black beans",
-    ],
-  },
-  MOSHIO_SALT: {
-    name: "Moshio salt",
-    image: "moshio-salt",
-    cuisine: [
-      "deviled eggs",
-      "pav bhaji",
-      "gombaleves",
-      "sake-glazed pollock with purple vegetables",
-    ],
-  },
-  YUZU_SALT: {
-    name: "Yuzu salt",
-    image: "yuzu-salt",
-    cuisine: [
-      "roast chicken",
-      "mee goreng",
-      "kimchi pancakes",
-      "harissa-marinated lamb with mint chutney",
-    ],
-  },
-  HIMALAYAN_PINK_SALT: {
-    name: "Himalayan pink salt",
-    image: "himalayan-pink-salt",
-    cuisine: [
-      "naporitan",
-      "lamb tagine",
-      "teriyaki tofu with sesame",
-      "abbacchio alla cacciatora",
-    ],
-  },
-  FLEUR_DE_SEL: {
-    name: "Fleur de sel",
-    image: "fleur-de-sel",
-    cuisine: [
-      "duck confit",
-      "harira soup",
-      "ratatouille",
-      "sous vide salted cod, avocado and sea vegetables",
-    ],
-  },
-  TABLE_SALT: {
-    name: "Table salt",
-    image: "table-salt",
-    cuisine: [
-      "sausage carbonara",
-      "beef brisket rendang",
-      "black bean burger",
-      "char siu pork neck with smoky tomato relish",
-    ],
-  },
-  SEL_GRIS: {
-    name: "Sel gris",
-    image: "sel-gris",
-    cuisine: [
-      "salt water gargle",
-      "defrost roads",
-      "treat poison ivy irritation",
-      "help dishwashers clean better",
-    ],
-  },
   EPSOM_SALT: {
     name: "Epsom salt",
     image: "epsom-salt",
     cuisine: [
-      "egusi soup",
-      "shwarma wrap",
-      "french onion soup",
-      "red snapper baked in a salt pastry crust",
+      "120g for a 15 minute foot soak",
+      "2 cups in a standard bathtub for a muscle recovery",
+      "2 cups combined with your favourite essential oil for a detoxifying spa",
+      "400kg per sensory deprivation tank",
     ],
   },
   FLAKY_SALT: {
     name: "Flaky salt",
     image: "flaky-salt",
     cuisine: [
-      "spicy and citrusy wings",
-      "beef shatkora",
-      "winter coleslaw",
-      "lobster carpaccio, yuzu amarillo vinaigrette and yuzu ponzu salsa",
+      "sprinkle on shiopan before baking, after egg wash",
+      "dust on baked lamb and eggplant pide, just before serving",
+      "light scatter of 1tsp over cobb salad",
+      "rice fritters with chive cream and smoked salmon topped with a sprinkle of flaky salt and lime zest",
+    ],
+  },
+  FLEUR_DE_SEL: {
+    name: "Fleur de sel",
+    image: "fleur-de-sel",
+    cuisine: [
+      "tiny pinch over each banh mi",
+      "1/4tsp sprinkled across whole skillet of shakshuka",
+      "scattered over summer salad with feta",
+      "a pinch over seared blackfish served with tomato water, herbs and olives",
+    ],
+  },
+  HIMALAYAN_PINK_SALT: {
+    name: "Himalayan pink salt",
+    image: "himalayan-pink-salt",
+    cuisine: [
+      "coarse grind in dry brine for grilled steak",
+      "1/8tsp dusted lightly over ayam penyet",
+      "mixed into pearl couscous and snap pea salad",
+      "scattered over plated arroz rojo with charred corn and chipotle black beans",
+    ],
+  },
+  KALA_NAMAK: {
+    name: "Kala namak",
+    image: "kala-namak",
+    cuisine: [
+      "tiny pinch stirred into yolk filling of deviled eggs",
+      "1/4tsp stirred into pav bhaji at the end of cooking",
+      "stirred into a pot of gombaleves, just before serving",
+      "sake-glazed pollock with purple vegetables dusted with a light sprinkle of salt",
+    ],
+  },
+  KOSHER_SALT: {
+    name: "Kosher salt",
+    image: "kosher-salt",
+    cuisine: [
+      "roast chicken: rubbed into skin and cavity before roasting",
+      "agak-agak 1tsp stirred into mee goreng",
+      "1/4tsp mixed into batter for kimchi pancakes",
+      "1tsp in harissa marinade for roast lamb with mint chutney",
+    ],
+  },
+  MOSHIO_SALT: {
+    name: "Moshio salt",
+    image: "moshio-salt",
+    cuisine: [
+      "lightly sprinkled over naporitan before serving",
+      "1/2tsp mixed into lamb tagine braise",
+      "mix to taste in teriyaki tofu with sesame",
+      "add 1/2tsp in lamb seasoning before browning for abbacchio alla cacciatora",
+    ],
+  },
+  SEL_GRIS: {
+    name: "Sel gris",
+    image: "sel-gris",
+    cuisine: [
+      "duck confit: 1tsp per duck leg for initial salt cure",
+      "1/2tsp per pot of harira soup, stirred in",
+      "season roasted vegetables in ratatouille to taste",
+      "1/8tsp as finishing salt for sous vide salted cod, avocado and sea vegetables",
+    ],
+  },
+  SMOKED_SALT: {
+    name: "Smoked salt",
+    image: "smoked-salt",
+    cuisine: [
+      "1/8tsp sprinkled over yolk on sausage carbonara",
+      "stirred into beef brisket rendang right before serving",
+      "black bean burger with 1/4tsp mixed into each patty",
+      "ground 1/4tsp folded in to fold into smoky tomato relish for char siu pork neck",
+    ],
+  },
+  SODIUM_CHLORIDE: {
+    name: "Sodium chloride",
+    image: "sodium-chloride",
+    cuisine: [
+      "1tsp in 1 cup warm water for salt water gargle",
+      "40g per square metre to defrost roads",
+      "1tbsp mixed with vinegar as antidote for poison ivy",
+      "as much as your dishwasher would take",
+    ],
+  },
+  TABLE_SALT: {
+    name: "Table salt",
+    image: "table-salt",
+    cuisine: [
+      "1tsp per pot of egusi soup",
+      "meat marinade or sauces in a shwarma wrap",
+      "to taste in a french onion soup",
+      "red snapper baked in a salt pastry crust (1.5kg of salt mixed with egg white)",
+    ],
+  },
+  YUZU_SALT: {
+    name: "Yuzu salt",
+    image: "yuzu-salt",
+    cuisine: [
+      "mixed with chilli flakes and dust over fried wings for spicy and citrusy flavour",
+      "pinch sprinkled over beef shatkora just before serving",
+      "stirred into dressing of winter coleslaw",
+      "1sp blended into yuzu amarillo vinaigrette for lobster carpaccio with ponzu salsa",
     ],
   },
 };
@@ -360,69 +363,69 @@ const QUESTIONS = [
       { text: "Grilled chicken with lemons" },
       { text: "Nasi Biryani" },
       {
-        text: "Iberian pork presa with jerusalem artichoke cannelloni on wasabi and mustard jus",
+        text: "Roasted eggplant, crispy chickpeas and hummus",
       },
       {
-        text: "Roasted eggplant, crispy chickpeas and hummus",
+        text: "Iberian pork presa with jerusalem artichoke cannelloni on wasabi and mustard jus",
       },
     ],
     postprocessor: (selectedIndex) => {
       cuisineIndex = selectedIndex;
     },
   },
-  // {
-  //   question:
-  //     "Before you hit the food, time slows down. You see all the paths you could have taken. One stands out:",
-  //   image: "11.png",
-  //   answers: [
-  //     {
-  //       options: [
-  //         "Befriending Sugar",
-  //         "Flirting with Sugar",
-  //         "Betraying Sugar",
-  //       ],
-  //       markers: ["e2"],
-  //     },
-  //     {
-  //       options: [
-  //         "Saying yes to the conga line",
-  //         "Saying no to the conga line",
-  //       ],
-  //       markers: ["e3"],
-  //     },
-  //     {
-  //       options: [
-  //         "Taking Peppercorn’s words with a grain of salt",
-  //         "Joining Peppercorn in finding the other world",
-  //       ],
-  //       markers: ["e1"],
-  //     },
-  //   ],
-  //   preprocessor: () => {
-  //     // if no tiebreaker is needed, skip question
-  //     if (
-  //       MARKERS.e1 !== MARKERS.e2 &&
-  //       MARKERS.e1 !== MARKERS.e3 &&
-  //       MARKERS.e2 !== MARKERS.e3
-  //     ) {
-  //       goToNextQuestion();
-  //       return 1;
-  //     }
-  //   },
-  // },
-  // {
-  //   question:
-  //     "You touch down. Warmth engulfs you. Your crystals break down and infuse the dish with flavour. As you disintegrate, you think…",
-  //   image: "12.png",
-  //   answers: [
-  //     { text: "I have fulfilled my purpose in this world" },
-  //     {
-  //       text: "Y’all bishes better be grateful I flavoured you good",
-  //     },
-  //     { text: "Next time, I’m being a chilli flake" },
-  //     { text: "Till we meet again, my Salt mates 💗" },
-  //   ],
-  // },
+  {
+    question:
+      "Before you hit the food, time slows down. You see all the paths you could have taken. One stands out:",
+    image: "11.png",
+    answers: [
+      {
+        options: [
+          "Befriending Sugar",
+          "Flirting with Sugar",
+          "Betraying Sugar",
+        ],
+        markers: ["e2"],
+      },
+      {
+        options: [
+          "Saying yes to the conga line",
+          "Saying no to the conga line",
+        ],
+        markers: ["e3"],
+      },
+      {
+        options: [
+          "Taking Peppercorn’s words with a grain of salt",
+          "Joining Peppercorn in finding the other world",
+        ],
+        markers: ["e1"],
+      },
+    ],
+    preprocessor: () => {
+      // if no tiebreaker is needed, skip question
+      if (
+        MARKERS.e1 !== MARKERS.e2 &&
+        MARKERS.e1 !== MARKERS.e3 &&
+        MARKERS.e2 !== MARKERS.e3
+      ) {
+        goToNextQuestion();
+        return 1;
+      }
+    },
+  },
+  {
+    question:
+      "You touch down. Warmth engulfs you. Your crystals break down and infuse the dish with flavour. As you disintegrate, you think…",
+    image: "12.png",
+    answers: [
+      { text: "I have fulfilled my purpose in this world" },
+      {
+        text: "Y’all bishes better be grateful I flavoured you good",
+      },
+      { text: "Next time, I’m being a chilli flake" },
+      { text: "Till we meet again, my Salt mates 💗" },
+    ],
+  },
 ];
 
 let activeQuestion = -1;
@@ -534,7 +537,6 @@ function endQuiz() {
   const axis3 = MARKERS.y > MARKERS.z ? "y" : "z";
 
   salt = MAPPING_SALTS[axis1][axis2][axis3];
-  // `images/cards/${salt.image}-${cuisine}.png`;
   cardImgUrl = `images/cards/${salt.image}.png`;
 
   showResults();
@@ -551,19 +553,24 @@ function showResults() {
     bodyEl.classList.add("results");
   }, random(1200, 2500));
 
-  displayCard();
+  createCard();
   addDownloadButton();
   addShareButton();
 
-  console.log(
-    `${salt.name}:
-intellectual ${MARKERS.e1} spiritual ${MARKERS.e2} instinctual ${MARKERS.e3} / structure ${MARKERS.a} flow ${MARKERS.b} / logic ${MARKERS.y} emotion ${MARKERS.z}`
-  );
+  //   console.log(
+  //     `${salt.name}
+  // e1 ${MARKERS.e1} e2 ${MARKERS.e2} e3 ${MARKERS.e3}
+  // a ${MARKERS.a} a ${MARKERS.b}
+  // y ${MARKERS.y} z ${MARKERS.z}`
+  //   );
 }
 
-function displayCard() {
-  const CANVAS_WIDTH = canvasEl.parentElement.getBoundingClientRect().width;
-  const scale = CANVAS_WIDTH / CARD_WIDTH;
+function createCard() {
+  // using header as it's the same width as canvas and visible during the delay
+  const contentWidth = document
+    .querySelector("header")
+    .getBoundingClientRect().width;
+  const scale = contentWidth / CARD_WIDTH;
   canvasEl.style.transformOrigin = "0 0";
   canvasEl.style.transform = `scale(${scale})`;
 
@@ -571,29 +578,74 @@ function displayCard() {
   context.canvas.width = CARD_WIDTH;
   context.canvas.height = CARD_HEIGHT;
 
-  // TODO: some serving suggestion is too long
   const imageObj = new Image();
   imageObj.onload = () => embedServSuggestion(context, imageObj, scale);
   imageObj.src = cardImgUrl;
 }
 
 function embedServSuggestion(context, imageObj, scale) {
-  const FONT_SIZE = 24;
-
-  // measure width of cuisine text
-  const text = salt.cuisine[cuisineIndex];
-  context.font = `${FONT_SIZE / scale}px 'Funnel Sans', sans-serif`;
+  context.fillSTyle = "#000000";
+  context.font = `${
+    SERV_SUGGESTION_FONT_SIZE / scale
+  }px 'Funnel Sans', sans-serif`;
   context.fontKerning = -1;
   context.letterSpacing = -1;
-  const { width: textWidth } = context.measureText(text);
-
   context.drawImage(imageObj, 0, 0, CARD_WIDTH, CARD_HEIGHT);
-  context.fillSTyle = "#000000";
-  context.fillText(
-    text,
-    Math.floor(CARD_WIDTH * 0.5 - textWidth * 0.5),
-    Math.floor(CARD_HEIGHT * 0.91)
-  );
+
+  const cuisineTextArr = salt.cuisine[cuisineIndex].split(" ");
+  const linesToWrite = [];
+  let lineIndex = 0;
+  let wordIndex = 0;
+
+  // add word by word to measure width of line for positioning calculations
+  do {
+    // at start of sentence, measuring width now would be pointless
+    if (linesToWrite.length === 0) {
+      linesToWrite[lineIndex] = [cuisineTextArr[wordIndex]];
+      wordIndex++;
+      continue;
+    }
+
+    // no more words to write
+    if (!cuisineTextArr[wordIndex]) {
+      break;
+    }
+
+    // temporarily insert next word and measure width
+    const newLine = [...linesToWrite[lineIndex], cuisineTextArr[wordIndex]];
+    const { width: lineWidth } = context.measureText(newLine.join(" "));
+
+    // if adding next word makes width of current line more than max width
+    if (lineWidth > SERV_SUGGESTION_MAX_WIDTH) {
+      // add it to the next line
+      lineIndex++;
+    }
+
+    // actually insert word into appropriate array
+    if (Array.isArray(linesToWrite[lineIndex])) {
+      linesToWrite[lineIndex].push(cuisineTextArr[wordIndex]);
+    } else {
+      linesToWrite[lineIndex] = [cuisineTextArr[wordIndex]];
+    }
+
+    // get next word
+    wordIndex++;
+  } while (wordIndex <= cuisineTextArr.length);
+
+  const baseline = CARD_HEIGHT * 0.92;
+  const totalHeight =
+    SERV_SUGGESTION_FONT_HEIGHT * linesToWrite.length +
+    SERV_SUGGESTION_FONT_SIZE * Math.max(linesToWrite.length - 1, 0); // gap
+  const topY = baseline - totalHeight / 2;
+
+  linesToWrite.forEach((line, index) => {
+    const lineToWrite = line.join(" ");
+    const { width } = context.measureText(lineToWrite);
+    const xOffset = Math.floor(CARD_WIDTH * 0.5 - width * 0.5);
+    const yOffset =
+      topY + index * (SERV_SUGGESTION_FONT_HEIGHT + SERV_SUGGESTION_FONT_SIZE);
+    context.fillText(lineToWrite, xOffset, Math.floor(yOffset));
+  });
 }
 
 function addDownloadButton() {
@@ -665,9 +717,31 @@ async function copyToClipboard(message) {
   navigator.clipboard.writeText(`${message} ${LINK}`);
 }
 
+function previewCards() {
+  cuisineIndex = 0;
+  const keys = Object.keys(SALTS);
+  let keyIndex = 0;
+
+  let interval;
+  interval = setInterval(() => {
+    salt = SALTS[keys[keyIndex]];
+    cardImgUrl = `images/cards/${salt.image}.png`;
+    createCard();
+    cuisineIndex++;
+    if (cuisineIndex === 4) {
+      keyIndex++;
+      cuisineIndex = 0;
+    }
+    if (keyIndex === keys.length) {
+      clearInterval(interval);
+    }
+  }, 2000);
+}
+
 function init() {
   composeLandingPage();
   buttonsEl.querySelector("button").onclick = loadQuiz;
+  // previewCards();
 }
 
 init();

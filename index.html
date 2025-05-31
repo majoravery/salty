@@ -6,13 +6,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+    <meta property="og:url" content="https://majoravery.github.io/salty" />
     <meta property="og:title" content="What Salt Are You?" />
     <meta property="og:image" content="images/thumbnail.png" />
-    <meta property="og:url" content="https://majoravery.github.io/salty" />
     <meta property="og:type" content="website" />
-    <meta name="twitter:title" content="What Salt Are You?">
-    <meta name="twitter:image" content="images/thumbnail.png">
-    <meta name="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://whatsaltareyou.com/" />
+    <meta property="twitter:title" content="What Salt Are You?">
+    <meta property="twitter:image" content="images/thumbnail.png">
+    <meta property="twitter:card" content="summary_large_image">
 
     <link rel="icon" href="images/favicon.ico">
 
@@ -60,7 +61,17 @@
     </p>
 
     <script src="script.js" defer async></script>
-    <!-- add GA here too -->
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-G820G05HH4"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-G820G05HH4');
+    </script>
+
 </body>
 
 </html>
