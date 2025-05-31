@@ -703,16 +703,16 @@ async function share() {
     url: LINK,
   };
 
-  const response = await fetch(cardImgUrl);
-  const blob = await response.blob();
-  const file = new File([blob], `${salt.name}.png`, { type: blob.type });
+  canvasEl.toBlob(async (blob) => {
+    const file = new File([blob], `${salt.name}.png`, { type: blob.type });
 
-  const canShareFiles =
-    navigator.canShare && navigator.canShare({ files: [file] });
+    const canShareFiles =
+      navigator.canShare && navigator.canShare({ files: [file] });
 
-  await navigator.share({
-    ...data,
-    ...(canShareFiles ? { files: [file] } : {}),
+    await navigator.share({
+      ...data,
+      ...(canShareFiles ? { files: [file] } : {}),
+    });
   });
 }
 
