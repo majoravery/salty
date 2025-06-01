@@ -563,13 +563,14 @@ function showResults() {
 }
 
 function createCard() {
-  // using header as it's the same width as canvas and visible during the delay
-  const contentWidth = document
-    .querySelector("header")
-    .getBoundingClientRect().width;
-  const canvasScale = Math.round((contentWidth / CARD_WIDTH) * 1000) / 1000;
   canvasEl.style.transformOrigin = "0 0";
+  const canvasScale = getCanvasScale();
   canvasEl.style.transform = `scale(${canvasScale})`;
+
+  window.addEventListener("resize", () => {
+    const canvasScale = getCanvasScale();
+    canvasEl.style.transform = `scale(${canvasScale})`;
+  });
 
   const context = canvasEl.getContext("2d", { alpha: false });
   context.canvas.width = CARD_WIDTH;
@@ -578,6 +579,14 @@ function createCard() {
   const imageObj = new Image();
   imageObj.onload = () => embedServSuggestion(context, imageObj, canvasScale);
   imageObj.src = `images/cards/${salt.image}.png`;
+}
+
+function getCanvasScale() {
+  // using header as it's the same width as canvas and visible during the delay
+  const contentWidth = document
+    .querySelector("header")
+    .getBoundingClientRect().width;
+  return Math.round((contentWidth / CARD_WIDTH) * 1000) / 1000;
 }
 
 function embedServSuggestion(context, imageObj, canvasScale) {
