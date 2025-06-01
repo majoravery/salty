@@ -74,13 +74,15 @@ body.delay {
     height: 100vh;
 }
 
-body.results {
+body.results,
+body.viewAll {
     grid-template-rows: min-content min-content max-content;
     grid-template-areas:
         "header"
         "image"
         "buttons";
 }
+
 
 header {
     grid-area: header;
@@ -150,13 +152,22 @@ body.quiz div#image {
     padding-top: 60%;
 }
 
+body.delay div#image,
 body.results div#image {
-    padding-top: 125%;
     display: none;
 }
 
-body.delay div#image {
-    display: none;
+body.results div#image {
+    display: block;
+}
+
+body.viewAll div#image div {
+    padding-top: 125%;
+    position: relative;
+}
+
+body.viewAll div#image div+div {
+    margin-top: 1rem;
 }
 
 div#image img {
@@ -203,7 +214,8 @@ body.landing p#text {
     display: none;
 }
 
-body.results p#text {
+body.results p#text,
+body.viewAll p#text {
     display: none;
 }
 

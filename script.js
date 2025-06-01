@@ -1,3 +1,5 @@
+// building the entire thing in vanilla js bc i cbf with bundlers
+
 const LINK = "https://whatsaltareyou.com";
 const CARD_WIDTH = 1620;
 const CARD_HEIGHT = 2025;
@@ -456,13 +458,12 @@ function composeLandingPage() {
 }
 
 function loadQuiz() {
-  bodyEl.classList.remove("landing");
+  toggleBodyClass("quiz");
   // prevents flash
   imageDivEl.removeChild(imageDivEl.firstChild);
   const img = document.createElement("img");
   imageDivEl.appendChild(img);
   goToNextQuestion();
-  bodyEl.classList.add("quiz");
 }
 
 function goToNextQuestion() {
@@ -496,9 +497,7 @@ function loadQuestion(index) {
   textEl.innerHTML = question;
   imageDivEl.querySelector("img").src = `images/questions/${image}`;
   answers.forEach(({ text, markers }, indexAns) => {
-    const button = document.createElement("button");
-    button.innerHTML = text;
-    button.onclick = function () {
+    addButton(text, function () {
       if (markers) {
         makeSelection(markers);
       }
@@ -509,8 +508,7 @@ function loadQuestion(index) {
 
       // selection is made, go to next question
       goToNextQuestion();
-    };
-    buttonsEl.appendChild(button);
+    });
   });
 }
 
@@ -543,16 +541,15 @@ function showResults() {
   clearScreen();
 
   // show delay screen to simulate computation + allow preloading
-  bodyEl.classList.remove("quiz");
-  bodyEl.classList.add("delay");
+  toggleBodyClass("delay");
   setTimeout(() => {
-    bodyEl.classList.remove("delay");
-    bodyEl.classList.add("results");
+    toggleBodyClass("results");
   }, random(1200, 2500));
 
   createCard();
   addDownloadButton();
   addShareButton();
+  addViewAllButton();
 
   //   console.log(
   //     `${salt.name}
@@ -658,9 +655,7 @@ function embedServSuggestion(context, imageObj, canvasScale) {
 }
 
 function addDownloadButton() {
-  const download = document.createElement("button");
-  download.innerHTML = "Download salt card";
-  download.onclick = function () {
+  addButton("Download salt card", function () {
     canvasEl.toBlob((blob) => {
       const hidden = document.createElement("a");
       hidden.download = salt.name;
@@ -668,34 +663,36 @@ function addDownloadButton() {
       hidden.href = URL.createObjectURL(blob);
       hidden.click();
     });
-  };
-  buttonsEl.appendChild(download);
+  });
 }
 
 function addShareButton() {
   const shareCta = "Share with friends!";
-  const shareButton = document.createElement("button");
-  shareButton.innerHTML = shareCta;
-  shareButton.onclick = async function () {
-    const message = `My salt identity is ${salt.name} and I'm not salty about it. Find out what salt you are:`;
-    try {
-      await share(message);
-    } catch (error) {
-      console.error(error);
-
+  addButton(
+    shareCta,
+    async function () {
+      const message = `My salt identity is ${salt.name} and I'm not salty about it. Find out what salt you are:`;
       try {
-        await copyToClipboard(message);
-        shareButton.innerHTML = "Copied to clipboard!";
-        setTimeout(() => {
-          shareButton.innerHTML = shareCta;
-        }, 2000);
+        await share(message);
       } catch (error) {
         console.error(error);
-        shareButton.innerHTML = "Couldn't copy to clipboard :-(";
+
+        const shareButton = document.querySelector("#share");
+
+        try {
+          await copyToClipboard(message);
+          shareButton.innerHTML = "Copied to clipboard!";
+          setTimeout(() => {
+            shareButton.innerHTML = shareCta;
+          }, 2000);
+        } catch (error) {
+          console.error(error);
+          shareButton.innerHTML = "Couldn't copy to clipboard :-(";
+        }
       }
-    }
-  };
-  buttonsEl.appendChild(shareButton);
+    },
+    "share"
+  );
 }
 
 async function share() {
@@ -726,7 +723,27 @@ async function copyToClipboard(message) {
   navigator.clipboard.writeText(`${message} ${LINK}`);
 }
 
-function previewCards() {
+function addViewAllButton() {
+  addButton("View all archetypes", displayAllSalts);
+}
+
+function displayAllSalts() {
+  clearScreen();
+  toggleBodyClass("viewAll");
+
+  Object.keys(SALTS).forEach((key) => {
+    const wrapper = document.createElement("div");
+    const card = document.createElement("img");
+    card.src = `images/cards/${SALTS[key].image}.png`;
+    card.alt = `images/cards/${SALTS[key].name}.png`;
+    wrapper.appendChild(card);
+    imageDivEl.appendChild(wrapper);
+  });
+
+  addButton("Back", showResults);
+}
+
+function TEST_previewCards() {
   cuisineIndex = 0;
   const keys = Object.keys(SALTS);
   let keyIndex = 0;
@@ -749,7 +766,7 @@ function previewCards() {
 function init() {
   composeLandingPage();
   buttonsEl.querySelector("button").onclick = loadQuiz;
-  // previewCards();
+  // TEST_previewCards();
 }
 
 init();
@@ -759,4 +776,17 @@ init();
 // min inclusive, max exclusive
 function random(max, min = 0) {
   return Math.floor(Math.random() * (max - min) + min);
+}
+
+function toggleBodyClass(className) {
+  bodyEl.classList.remove(...bodyEl.classList);
+  bodyEl.classList.add(className);
+}
+
+function addButton(text, callback, id = "") {
+  const button = document.createElement("button");
+  button.innerHTML = text;
+  button.id = id;
+  button.onclick = callback;
+  buttonsEl.appendChild(button);
 }
