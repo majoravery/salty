@@ -174,9 +174,6 @@ const MAPPING_SALTS = {
   },
 };
 
-// yea if you make changes to the questions array pls update this or it's gon break obvs
-const INDEX_TIEBREAKER = 10;
-
 const QUESTIONS = [
   {
     question:
@@ -196,7 +193,7 @@ const QUESTIONS = [
   },
   {
     question:
-      "Out of nowhere, a giant spoon crashes in and scoops you up. It carries you high up into the air, out of the jar. You…",
+      "Out of nowhere, a giant spoon crashes in and scoops you up. It carries you high up into the air, out of the jar. You...",
     image: "2.png",
     answers: [
       {
@@ -227,16 +224,37 @@ const QUESTIONS = [
     ],
   },
   {
+    question: "As the group sets off, you get a whiff of savoury aromatics.",
+    image: "3a.png",
+    answers: [
+      {
+        text: "Oooo I’m getting a tinge of nutmeg... is that bechamel?",
+        markers: ["e1"],
+      },
+      {
+        text: "I am so hungry right now this is torture",
+        markers: ["e2"],
+      },
+      {
+        text: "Hm, this smell meams heat is near – let’s reroute for safety",
+        markers: ["e3"],
+      },
+    ],
+  },
+  {
     question:
       "A grain of Sugar slides over and mistakes you for one of her own.",
     image: "4.png",
     answers: [
-      { text: "Correct her politely but firmly", markers: ["e3"] },
+      { text: "Correct her politely but firmly", markers: ["e1"] },
       {
-        text: "Whisper, “We’re all just crystals trying our best”",
-        markers: ["e1"],
+        text: "Whisper “We’re all just crystals trying our best”",
+        markers: ["e2"],
       },
-      { text: "OMG another Salt buddy! *oblivious*", markers: ["e2"] },
+      {
+        text: "Side-eye her and continue walking. Nice try, infiltrator",
+        markers: ["e3"],
+      },
     ],
   },
   {
@@ -248,12 +266,12 @@ const QUESTIONS = [
         text: "Befriends Sugar and listens to her story",
         markers: ["a", "z"],
       },
-      { text: "“So… you come here often?”", markers: ["b", "z"] },
       { text: "Use her as bait for curious ants", markers: ["a", "y"] },
       {
         text: "Let her do her thing and watch how it plays out",
         markers: ["b", "y"],
       },
+      { text: "“So... you come here often?”", markers: ["b", "z"] },
     ],
     postprocessor: (selected) => {
       const ansIdxSugar = 0;
@@ -301,10 +319,10 @@ const QUESTIONS = [
   },
   {
     question:
-      "You encounter a lone Peppercorn who raves on about the other world that you should visit. “Beyond this steel plane, it is where grains like us go and never melt!” You…",
+      "You encounter a lone Peppercorn who raves on about the other world that you should visit. “Beyond this steel plane, it is where grains like us go and never melt!” You...",
     image: "7.png",
     answers: [
-      { text: "Roll your eyes–classic Peppercorn", markers: ["y"] },
+      { text: "Roll your eyes – classic Peppercorn", markers: ["y"] },
       {
         text: "Consider it deeply and feel something shift inside you",
         markers: ["z"],
@@ -325,24 +343,68 @@ const QUESTIONS = [
   },
   {
     question:
-      "10,000 steps later, you realise this world is larger than you expected. The group is getting tired, morale is low. Everyone is starting to clump up and Sugar is slowly fermenting. What do you do?",
-    image: "8.png",
+      "From a distance, a flicker of light catches your eye — a Salt grain that looks exactly like you. Same sparkle, different texture, smiling meekly at you. You think...",
+    image: "7a.png",
     answers: [
       {
-        text: "Devise some sort of trolley to push your tired comrades",
+        text: "Oh dear I should help",
         markers: ["e1"],
       },
       {
-        text: "Rally everyone’s spirits like an over-enthusiastic spin instructor",
-        markers: ["e1"],
+        text: "Is that... me? Is this deja vu?",
+        markers: ["e2"],
       },
-      { text: "Crack a joke, distract them!", markers: ["e2"] },
-      { text: "Let everyone rest, it’s been a hard day", markers: ["e3"] },
+      {
+        text: "Yo bruh who da fuq is that",
+        markers: ["e3"],
+      },
     ],
   },
   {
     question:
-      "Suddenly, a strong gust of wind sweeps through the room and lifts you high into the air. You’re suspended momentarily, and you feel…",
+      "10,000 steps later, you realise this world is larger than you expected. The group is getting tired, morale is low. Everyone is starting to clump up and Sugar is slowly fermenting. What do you do?",
+    image: "8.png",
+    answers: [
+      {
+        text: "Rally everyone’s spirits like an over-enthusiastic spin instructor",
+        markers: ["e1"],
+      },
+      { text: "Let everyone rest, it’s been a hard day", markers: ["e2"] },
+      { text: "Crack a joke, distract them!", markers: ["e3"] },
+    ],
+  },
+  {
+    question:
+      "You feel a slight lightheadedness – perhaps it is time to rest. During this moment, you find yourself...",
+    image: "8a.png",
+    answers: [
+      {
+        text: "Bonding with your mates over the wild journey you’ve had so far",
+        markers: ["e2"],
+      },
+      {
+        text: "Completely knocked out – I guess I was tired after all",
+        markers: ["e3"],
+      },
+      { text: "Contemplating the mysteries of this world", markers: ["e1"] },
+    ],
+  },
+  {
+    question:
+      "The room darkens. You sense a shift. Something big is coming...  ",
+    image: "8b.png",
+    answers: [
+      {
+        text: "Panic! And mentally prepare for the worst possible outcome",
+        markers: ["e1"],
+      },
+      { text: "Tuck into the safest crevice you can find", markers: ["e3"] },
+      { text: "Reach out to your buddies – everyone ok?", markers: ["e2"] },
+    ],
+  },
+  {
+    question:
+      "Suddenly, a strong gust of wind sweeps through the room and lifts you high into the air. You’re suspended momentarily, and you feel...",
     image: "9.png",
     answers: [
       { text: "Terror – am I gonna die?", markers: ["a", "y"] },
@@ -417,7 +479,7 @@ const QUESTIONS = [
   },
   {
     question:
-      "You touch down. Warmth engulfs you. Your crystals break down and infuse the dish with flavour. As you disintegrate, you think…",
+      "You touch down. Warmth engulfs you. Your crystals break down and infuse the dish with flavour. As you disintegrate, you think...",
     image: "12.png",
     answers: [
       { text: "I have fulfilled my purpose in this world" },
@@ -429,6 +491,9 @@ const QUESTIONS = [
     ],
   },
 ];
+
+// yea if you make changes to the questions array pls update this or it's gon break obvs
+const INDEX_TIEBREAKER = QUESTIONS.length - 2; // it's the second last question
 
 const bodyEl = document.querySelector("body");
 const buttonsEl = document.querySelector("div#buttons");
