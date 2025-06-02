@@ -1,5 +1,6 @@
 // building the entire thing in vanilla js bc i cbf with bundlers
 
+const VERSION = "1.1.1";
 const LINK = "https://whatsaltareyou.com";
 const CARD_WIDTH = 1620;
 const CARD_HEIGHT = 2025;
@@ -503,6 +504,7 @@ const textEl = document.querySelector("p#text");
 
 let activeQuestion = -1;
 let cuisineIndex;
+let path = [];
 let salt;
 
 function composeLandingPage() {
@@ -571,6 +573,8 @@ function loadQuestion(index) {
         postprocessor(indexAns);
       }
 
+      path.push(indexAns);
+
       // selection is made, go to next question
       goToNextQuestion();
     });
@@ -599,6 +603,12 @@ function endQuiz() {
   const axis3 = MARKERS.y > MARKERS.z ? "y" : "z";
 
   salt = MAPPING_SALTS[axis1][axis2][axis3];
+  gtag("event", "quiz_completed", {
+    result: salt.name,
+    path: path.join(","),
+    version: VERSION,
+  });
+
   showResults();
 }
 
