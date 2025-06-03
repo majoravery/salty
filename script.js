@@ -237,7 +237,7 @@ const QUESTIONS = [
         markers: ["e2"],
       },
       {
-        text: "Hm, this smell meams heat is near – let’s reroute for safety",
+        text: "Hm, this smell means heat is near – let’s reroute for safety",
         markers: ["e3"],
       },
     ],
