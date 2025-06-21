@@ -274,6 +274,11 @@ p#disclaimer {
     font-style: normal;
 }
 
+p#disclaimer a {
+    color: inherit;
+    text-decoration: underline;
+}
+
 body.landing p#disclaimer,
 body.results p#disclaimer {
     display: block;

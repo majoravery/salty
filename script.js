@@ -1,6 +1,6 @@
 // building the entire thing in vanilla js bc i cbf with bundlers
 
-const VERSION = "1.1.2";
+const VERSION = "1.1.3";
 const LINK = "https://whatsaltareyou.com";
 const CARD_WIDTH = 1620;
 const CARD_HEIGHT = 2025;
