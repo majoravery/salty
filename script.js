@@ -1,6 +1,6 @@
 // building the entire thing in vanilla js bc i cbf with bundlers
 
-const VERSION = "1.1.3";
+const VERSION = "1.1.4";
 const LINK = "https://whatsaltareyou.com";
 const CARD_WIDTH = 1620;
 const CARD_HEIGHT = 2025;
@@ -605,7 +605,7 @@ function endQuiz() {
   salt = MAPPING_SALTS[axis1][axis2][axis3];
   gtag("event", "quiz_completed", {
     result: salt.name,
-    path: path.join(","),
+    // path: path.join(","), // stop pushing this to analytics–currently useless data
     version: VERSION,
   });
 
